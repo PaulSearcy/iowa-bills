@@ -47,7 +47,7 @@ function setSession(session) {
 }
 
 function switchView(view) {
-    const page = view === 'list' ? 'bill-list.html' : 'vote-table.html';
+    const page = view === 'list' ? 'bill-list.html' : 'index.html';
     location.href = `${page}?${sessionQuery(currentSession, currentChamber)}`;
 }
 
