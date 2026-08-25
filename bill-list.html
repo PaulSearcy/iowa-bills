@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iowa Legislature Floor Votes</title>
+    <link rel="stylesheet" href="app.css">
+    <script src="js/votes.js"></script>
+    <style>
+        .container {
+            max-width: 46rem;
+        }
+
+        .bill-card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            content-visibility: auto;
+            contain-intrinsic-size: auto 11rem;
+        }
+
+        .bill-card:not(.collapsed) {
+            contain-intrinsic-size: auto 22rem;
+        }
+
+        .bill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 1.15rem 0.75rem;
+        }
+
+        .bill-id {
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .bill-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem 0.85rem;
+            margin-top: 0.2rem;
+            font-size: 0.8125rem;
+            color: var(--ink-muted);
+        }
+
+        .chamber-badge {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--ink-muted);
+        }
+
+        .bill-title {
+            padding: 0 1.15rem 0.85rem;
+            max-width: 70ch;
+            color: var(--ink);
+            text-wrap: pretty;
+        }
+
+        .vote-summary {
+            display: flex;
+            gap: 1.5rem;
+            padding: 0.65rem 1.15rem;
+            border-top: 1px solid var(--line);
+            font-size: 0.8125rem;
+            color: var(--ink-muted);
+        }
+
+        .vote-count {
+            display: flex;
+            align-items: baseline;
+            gap: 0.4rem;
+        }
+
+        .vote-count .count {
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+            color: var(--ink);
+        }
+
+        .vote-count.yea .count { color: var(--yea); }
+        .vote-count.nay .count { color: var(--nay); }
+        .vote-count.absent .count { color: var(--absent); }
+
+        .voters-section {
+            padding: 0.85rem 1.15rem 1.15rem;
+            border-top: 1px solid var(--line);
+        }
+
+        .voters-section h3 {
+            margin: 0 0 0.4rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .voter-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.15rem 0.9rem;
+        }
+
+        .voter-tag {
+            font-size: 0.8125rem;
+        }
+
+        .voter-tag.party-d { color: var(--party-d); }
+        .voter-tag.party-r { color: var(--party-r); }
+
+        .empty-voters {
+            color: var(--ink-muted);
+        }
+
+        .voters-group {
+            margin-bottom: 0.9rem;
+        }
+
+        .voters-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .bill-link {
+            font-size: inherit;
+            text-decoration: none;
+        }
+
+        .collapsible-toggle {
+            padding: 0;
+            border: none;
+            background: none;
+            font: inherit;
+            font-size: inherit;
+            color: var(--accent);
+            cursor: pointer;
+        }
+
+        .collapsible-toggle:hover {
+            text-decoration: underline;
+        }
+
+        .collapsible-toggle:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .collapsed .voters-section,
+        .voters-section:empty {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="page-title">Iowa Legislature Floor Votes</h1>
+            <p class="subtitle" id="page-subtitle">Floor votes on bills — bill by bill</p>
+        </header>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="session-select">Session</label>
+                <select id="session-select" onchange="setSession(this.value)">
+                    <option value="2026">2026</option>
+                    <option value="2025">2025</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <span id="view-label">View</span>
+                <div class="seg" role="group" aria-labelledby="view-label">
+                    <button type="button" id="btn-view-table" onclick="switchView('table')">Table</button>
+                    <button type="button" id="btn-view-list" class="active" onclick="switchView('list')">List</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <span id="chamber-label">Chamber</span>
+                <div class="seg chamber-toggle" role="group" aria-labelledby="chamber-label">
+                    <button type="button" id="btn-house" class="active" onclick="setChamber('House')">House</button>
+                    <button type="button" id="btn-senate" onclick="setChamber('Senate')">Senate</button>
+                    <button type="button" id="btn-both" onclick="setChamber('Both')">Both</button>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label for="search-input">Search</label>
+                <input type="text" id="search-input" placeholder="Bill number or member name" oninput="debounceRender()">
+            </div>
+            
+            <div class="control-group">
+                <button type="button" class="btn" onclick="toggleAll()">Expand / collapse all</button>
+            </div>
+        </div>
+        
+        <div class="stats" id="stats"></div>
+        
+        <div id="bill-container">
+            <div class="loading">Loading vote data...</div>
+        </div>
+    </div>
+
+    <script>
+        let currentSession = '2026';
+        let currentChamber = 'House';
+        let filterTimeout = null;
+        let allExpanded = true;
+        let renderedVotes = [];
+        let cardObserver = null;
+
+        function setChamber(chamber) {
+            currentChamber = chamber;
+            setChamberUI(chamber);
+            setUrlState(currentSession, currentChamber);
+            renderBills();
+        }
+
+        function debounceRender() {
+            clearTimeout(filterTimeout);
+            filterTimeout = setTimeout(renderBills, 150);
+        }
+
+        function ensureObserver() {
+            if (cardObserver) return cardObserver;
+            cardObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) hydrateCard(entry.target);
+                });
+            }, { rootMargin: '800px 0px' });
+            return cardObserver;
+        }
+
+        function toggleAll() {
+            allExpanded = !allExpanded;
+            document.querySelectorAll('.bill-card').forEach((card) => {
+                if (allExpanded) {
+                    card.classList.remove('collapsed');
+                } else {
+                    card.classList.add('collapsed');
+                }
+            });
+            updateToggleButtons();
+            if (allExpanded) hydrateVisibleCards();
+        }
+
+        function toggleCard(id) {
+            const card = document.getElementById(id);
+            card.classList.toggle('collapsed');
+            if (!card.classList.contains('collapsed')) hydrateCard(card);
+            updateToggleButtons();
+        }
+
+        function updateToggleButtons() {
+            document.querySelectorAll('.bill-card').forEach((card) => {
+                const btn = card.querySelector('.collapsible-toggle');
+                if (btn) {
+                    btn.textContent = card.classList.contains('collapsed') ? 'Show voters' : 'Hide voters';
+                }
+            });
+        }
+
+        function getFilteredVotes() {
+            if (!voteData || !voteData.votes) return [];
+
+            let votes = voteData.votes;
+
+            if (currentChamber !== 'Both') {
+                votes = votes.filter(v => v.chamber === currentChamber);
+            }
+
+            const searchText = document.getElementById('search-input').value.toLowerCase().trim();
+            if (searchText) {
+                votes = votes.filter(v => {
+                    const matchBill = v.legislation?.toLowerCase().includes(searchText);
+                    const matchTitle = v.legislationTitle?.toLowerCase().includes(searchText);
+                    const matchVoter =
+                        v.voteDetails?.yeas?.some(m => m.name?.toLowerCase().includes(searchText)) ||
+                        v.voteDetails?.nays?.some(m => m.name?.toLowerCase().includes(searchText)) ||
+                        v.voteDetails?.absentOrNotVoting?.some(m => m.name?.toLowerCase().includes(searchText));
+                    return matchBill || matchTitle || matchVoter;
+                });
+            }
+
+            return votes;
+        }
+
+        function getAbsentVoters(vote) {
+            return vote.voteDetails?.absentOrNotVoting || [];
+        }
+
+        function countLabel(value, list) {
+            if (typeof value === 'number' && Number.isFinite(value)) return value;
+            return list?.length || 0;
+        }
+
+        function renderVoterTags(voters) {
+            if (!voters || voters.length === 0) return '<span class="empty-voters">None</span>';
+
+            return voters
+                .slice()
+                .sort((a, b) => {
+                    if (a.partyAbbr !== b.partyAbbr) return a.partyAbbr === 'D' ? -1 : 1;
+                    return a.name.localeCompare(b.name);
+                })
+                .map(v => {
+                    const partyClass = v.partyAbbr ? `party-${v.partyAbbr.toLowerCase()}` : '';
+                    const label = v.partyAbbr
+                        ? `${escapeHtml(v.name)} (${escapeHtml(v.partyAbbr)})`
+                        : escapeHtml(v.name);
+                    return `<span class="voter-tag ${partyClass}">${label}</span>`;
+                })
+                .join('');
+        }
+
+        function renderVotersSection(vote) {
+            const absent = getAbsentVoters(vote);
+            return `
+                <div class="voters-group yeas">
+                    <h3>Voted yes (${vote.voteDetails?.yeas?.length || 0})</h3>
+                    <div class="voter-list">${renderVoterTags(vote.voteDetails?.yeas)}</div>
+                </div>
+                <div class="voters-group nays">
+                    <h3>Voted no (${vote.voteDetails?.nays?.length || 0})</h3>
+                    <div class="voter-list">${renderVoterTags(vote.voteDetails?.nays)}</div>
+                </div>
+                <div class="voters-group absent">
+                    <h3>Absent, excused, or not voting (${absent.length})</h3>
+                    <div class="voter-list">${renderVoterTags(absent)}</div>
+                </div>
+            `;
+        }
+
+        function hydrateCard(card) {
+            if (!card || card.dataset.hydrated === '1' || card.classList.contains('collapsed')) return;
+            const vote = renderedVotes[Number(card.dataset.voteIndex)];
+            if (!vote) return;
+            const section = card.querySelector('.voters-section');
+            if (!section) return;
+            section.innerHTML = renderVotersSection(vote);
+            card.dataset.hydrated = '1';
+        }
+
+        function hydrateVisibleCards() {
+            const buffer = 800;
+            document.querySelectorAll('.bill-card:not(.collapsed)').forEach((card) => {
+                const rect = card.getBoundingClientRect();
+                if (rect.bottom >= -buffer && rect.top <= window.innerHeight + buffer) {
+                    hydrateCard(card);
+                }
+            });
+        }
+
+        function renderBills() {
+            const container = document.getElementById('bill-container');
+            const votes = getFilteredVotes();
+            const observer = ensureObserver();
+
+            observer.disconnect();
+
+            if (votes.length === 0) {
+                renderedVotes = [];
+                container.innerHTML = '<div class="loading">No bills match this search.</div>';
+                document.getElementById('stats').innerHTML = '';
+                return;
+            }
+
+            renderedVotes = votes;
+            document.getElementById('stats').innerHTML = `Showing <strong>${votes.length}</strong> bills`;
+
+            const collapsedClass = allExpanded ? '' : 'collapsed';
+            const toggleText = allExpanded ? 'Hide voters' : 'Show voters';
+
+            const html = votes.map((vote, index) => {
+                const cardId = `bill-${index}`;
+                return `
+                    <div class="bill-card ${collapsedClass}" id="${cardId}" data-vote-index="${index}">
+                        <div class="bill-header">
+                            <div>
+                                <div class="bill-id">${escapeHtml(vote.legislation)}</div>
+                                <div class="bill-meta">
+                                    <span>${escapeHtml(vote.date)}</span>
+                                    ${vote.floorVoteUrl ? `<a href="${escapeHtml(vote.floorVoteUrl)}" target="_blank" rel="noopener" class="bill-link">View on legis.iowa.gov</a>` : ''}
+                                    <button type="button" class="collapsible-toggle" onclick="toggleCard('${cardId}')">${toggleText}</button>
+                                </div>
+                            </div>
+                            <span class="chamber-badge">${escapeHtml(vote.chamber)}</span>
+                        </div>
+
+                        <div class="bill-title">${escapeHtml(vote.legislationTitle) || 'No description available'}</div>
+
+                        <div class="vote-summary">
+                            <div class="vote-count yea">
+                                <span class="count">${countLabel(vote.ayes, vote.voteDetails?.yeas)}</span>
+                                <span>Yeas</span>
+                            </div>
+                            <div class="vote-count nay">
+                                <span class="count">${countLabel(vote.nays, vote.voteDetails?.nays)}</span>
+                                <span>Nays</span>
+                            </div>
+                            <div class="vote-count absent">
+                                <span class="count">${countLabel(vote.absentOrNotVoting, getAbsentVoters(vote))}</span>
+                                <span>Absent</span>
+                            </div>
+                        </div>
+
+                        <div class="voters-section"></div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = html;
+
+            const cards = container.querySelectorAll('.bill-card');
+            cards.forEach((card, index) => {
+                observer.observe(card);
+                if (allExpanded && index < 8) hydrateCard(card);
+            });
+            if (allExpanded) hydrateVisibleCards();
+        }
+
+        async function init() {
+            const state = getUrlState();
+            currentSession = state.session;
+            currentChamber = state.chamber;
+            document.getElementById('session-select').value = currentSession;
+            document.getElementById('page-title').textContent = `Iowa Legislature ${currentSession} Session`;
+            document.getElementById('page-subtitle').textContent = 'Floor votes on bills — bill by bill';
+            document.title = `Iowa Legislature ${currentSession} - Bill List`;
+            setChamberUI(currentChamber);
+            setUrlState(currentSession, currentChamber);
+
+            try {
+                await loadVoteData(currentSession);
+                renderBills();
+            } catch (error) {
+                document.getElementById('bill-container').innerHTML =
+                    `<div class="loading">Error: could not load ${SESSION_FILES[currentSession]}</div>`;
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

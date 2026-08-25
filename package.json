@@ -1,0 +1,19 @@
+{
+  "name": "iowalegis",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Convert Iowa Legislature floor-vote Excel exports to JSON",
+  "scripts": {
+    "convert": "node tools/convert-excel-to-json.js",
+    "fetch-votes": "node tools/fetch-vote-details.js",
+    "fetch-votes:2025": "node tools/fetch-vote-details.js --input data/2025session.json --output 2025session-with-voters.json --js-output vote-data-2025.js",
+    "fetch-votes:2026": "node tools/fetch-vote-details.js --input data/2026sessions.json --output data/2026session-with-voters.json --js-output vote-data-2026.js",
+    "compact-vote-data": "node tools/compact-vote-data.js vote-data-2025.js vote-data-2026.js",
+    "test": "echo \"No tests specified\""
+  },
+  "dependencies": {
+    "pdfjs-dist": "^4.0.379",
+    "xlsx": "^0.18.5"
+  }
+}
