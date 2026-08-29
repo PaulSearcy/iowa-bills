@@ -85,6 +85,28 @@ function escapeHtml(text) {
         .replace(/"/g, '&quot;');
 }
 
+function generalAssemblyNumber(sessionYear) {
+    const year = Number(sessionYear);
+    if (!Number.isFinite(year) || year < 1846) return null;
+    // Iowa GAs are two-year biennia; 2025–2026 is the 91st.
+    return Math.floor((year - 1843) / 2);
+}
+
+function billBookAbbreviation(legislation) {
+    const text = String(legislation || '').trim();
+    if (!text) return null;
+    // Floor votes on "H-8494 to H-8491" are for the first amendment.
+    const primary = text.split(/\s+to\s+/i)[0].trim();
+    return primary || null;
+}
+
+function billBookUrl(legislation, sessionYear) {
+    const ba = billBookAbbreviation(legislation);
+    const ga = generalAssemblyNumber(sessionYear);
+    if (!ba || !ga) return null;
+    return `https://www.legis.iowa.gov/legislation/BillBook?ga=${ga}&ba=${encodeURIComponent(ba)}`;
+}
+
 async function loadVoteData(session) {
     await loadScript(SESSION_FILES[session]);
     if (typeof voteData === 'undefined') {
