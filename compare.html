@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0XEFGRNYXR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-0XEFGRNYXR');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iowa Legislature Floor Votes</title>
+    <link rel="stylesheet" href="app.css">
+    <script src="js/votes.js"></script>
+    <style>
+        .container {
+            max-width: 56rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1 id="page-title">Iowa Legislature Floor Votes</h1>
+            <p class="subtitle" id="page-subtitle">Floor votes on bills — compare two legislators</p>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="session-select">Session</label>
+                <select id="session-select" onchange="setSession(this.value)">
+                    <option value="2026">2026</option>
+                    <option value="2025">2025</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <span id="view-label">View</span>
+                <div class="seg" role="group" aria-labelledby="view-label">
+                    <button type="button" id="btn-view-table" onclick="switchView('table')">Table</button>
+                    <button type="button" id="btn-view-list" onclick="switchView('list')">List</button>
+                    <button type="button" id="btn-view-compare" class="active"
+                        onclick="switchView('compare')">Compare</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <span id="chamber-label">Chamber</span>
+                <div class="seg chamber-toggle" role="group" aria-labelledby="chamber-label">
+                    <button type="button" id="btn-house" class="active" onclick="setChamber('House')">House</button>
+                    <button type="button" id="btn-senate" onclick="setChamber('Senate')">Senate</button>
+                    <button type="button" id="btn-both" onclick="setChamber('Both')">Both</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="compare-pickers">
+            <div class="picker">
+                <label for="member-a">This legislator</label>
+                <div class="combo" id="combo-a"></div>
+            </div>
+            <div class="picker">
+                <label for="member-b">Compared with</label>
+                <div class="combo" id="combo-b"></div>
+            </div>
+        </div>
+
+        <div class="stats" id="stats"></div>
+
+        <div class="legend" aria-label="Vote legend">
+            <div class="legend-item">
+                <span class="legend-swatch yea"></span>
+                <span>Yea</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-swatch nay"></span>
+                <span>Nay</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-swatch absent"></span>
+                <span>Absent / not voting</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-swatch none"></span>
+                <span>Did not participate</span>
+            </div>
+        </div>
+
+        <div id="compare-container">
+            <div class="loading">Loading vote data...</div>
+        </div>
+    </div>
+
+    <script>
+        let currentSession = '2026';
+        let currentChamber = 'House';
+        let currentCompareA = '';
+        let currentCompareB = '';
+        let index = null;
+        let selected = { a: null, b: null };
+        const pickers = {};
+
+        function setChamber(chamber) {
+            currentChamber = chamber;
+            setChamberUI(chamber);
+            setUrlState(currentSession, currentChamber);
+            Object.values(pickers).forEach((picker) => picker.refresh());
+            renderCompare();
+        }
+
+        function membersForChamber() {
+            return index?.membersByChamber[currentChamber] || [];
+        }
+
+        function votesForChamber() {
+            return index?.votesByChamber[currentChamber] || [];
+        }
+
+        function memberChamber(member) {
+            if (!member || currentChamber !== 'Both') return currentChamber === 'Both' ? null : currentChamber;
+            const house = index.membersByChamber.House.some((m) => m.name === member.name);
+            const senate = index.membersByChamber.Senate.some((m) => m.name === member.name);
+            if (house && !senate) return 'House';
+            if (senate && !house) return 'Senate';
+            return null;
+        }
+
+        function createPicker(rootId, inputId, slot) {
+            const root = document.getElementById(rootId);
+            const listId = `${inputId}-list`;
+            root.innerHTML = `
+                <input id="${inputId}" type="text" autocomplete="off" spellcheck="false"
+                    placeholder="Name, like Turek" role="combobox" aria-expanded="false"
+                    aria-controls="${listId}" aria-autocomplete="list">
+                <button type="button" class="combo-clear" hidden aria-label="Clear name">×</button>
+                <ul id="${listId}" class="combo-list" role="listbox" hidden></ul>
+            `;
+            const input = root.querySelector('input');
+            const clearBtn = root.querySelector('.combo-clear');
+            const list = root.querySelector('[role="listbox"]');
+            let activeIndex = -1;
+            let matches = [];
+
+            function close() {
+                list.hidden = true;
+                input.setAttribute('aria-expanded', 'false');
+                input.removeAttribute('aria-activedescendant');
+                activeIndex = -1;
+            }
+
+            function displayValue(member) {
+                return member ? memberLabel(member) : '';
+            }
+
+            function syncClear() {
+                clearBtn.hidden = !input.value;
+            }
+
+            function applyMember(member, fromTyping) {
+                selected[slot] = member;
+                currentCompareA = selected.a?.name || '';
+                currentCompareB = selected.b?.name || '';
+                if (!fromTyping) input.value = displayValue(member);
+                syncClear();
+                close();
+                setUrlState(currentSession, currentChamber);
+                renderCompare();
+            }
+
+            function optionId(i) {
+                return `${inputId}-opt-${i}`;
+            }
+
+            function renderList(query) {
+                const members = membersForChamber();
+                const q = query.trim().toLowerCase();
+                matches = q
+                    ? members.filter((m) =>
+                        m.name.toLowerCase().includes(q) ||
+                        (m.party || '').toLowerCase().includes(q) ||
+                        (m.partyAbbr || '').toLowerCase() === q
+                    )
+                    : members.slice();
+                matches = matches.slice(0, 12);
+                if (!matches.length) {
+                    list.innerHTML = '<li class="combo-empty">No matching legislators</li>';
+                } else {
+                    list.innerHTML = matches.map((m, i) => {
+                        const cls = partyClass(m);
+                        return `<li role="option" id="${optionId(i)}" class="combo-option ${cls}" data-index="${i}" aria-selected="${i === activeIndex}">${escapeHtml(memberLabel(m))}</li>`;
+                    }).join('');
+                }
+                list.hidden = false;
+                input.setAttribute('aria-expanded', 'true');
+            }
+
+            function moveActive(delta) {
+                if (list.hidden) renderList(input.value);
+                if (!matches.length) return;
+                activeIndex = (activeIndex + delta + matches.length) % matches.length;
+                matches.forEach((_, i) => {
+                    const el = document.getElementById(optionId(i));
+                    if (el) el.setAttribute('aria-selected', i === activeIndex ? 'true' : 'false');
+                });
+                const active = document.getElementById(optionId(activeIndex));
+                if (active) {
+                    input.setAttribute('aria-activedescendant', active.id);
+                    active.scrollIntoView({ block: 'nearest' });
+                }
+            }
+
+            input.addEventListener('input', () => {
+                selected[slot] = null;
+                currentCompareA = selected.a?.name || '';
+                currentCompareB = selected.b?.name || '';
+                syncClear();
+                activeIndex = -1;
+                renderList(input.value);
+                setUrlState(currentSession, currentChamber);
+                renderCompare();
+            });
+
+            input.addEventListener('focus', () => {
+                if (input.value.trim()) renderList(input.value);
+            });
+
+            input.addEventListener('keydown', (event) => {
+                if (event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    moveActive(1);
+                } else if (event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    moveActive(-1);
+                } else if (event.key === 'Enter') {
+                    event.preventDefault();
+                    if (activeIndex >= 0 && matches[activeIndex]) {
+                        applyMember(matches[activeIndex]);
+                    } else {
+                        const found = findMember(membersForChamber(), input.value);
+                        if (found) applyMember(found);
+                    }
+                } else if (event.key === 'Escape') {
+                    close();
+                }
+            });
+
+            list.addEventListener('mousedown', (event) => {
+                const option = event.target.closest('[data-index]');
+                if (!option) return;
+                event.preventDefault();
+                applyMember(matches[Number(option.dataset.index)]);
+            });
+
+            clearBtn.addEventListener('click', () => {
+                input.value = '';
+                applyMember(null, true);
+                input.focus();
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!root.contains(event.target)) close();
+            });
+
+            return {
+                input,
+                refresh() {
+                    const current = selected[slot];
+                    if (current && !membersForChamber().some((m) => m.name === current.name)) {
+                        applyMember(null);
+                        input.value = '';
+                        syncClear();
+                        return;
+                    }
+                    if (current) input.value = displayValue(current);
+                    syncClear();
+                },
+                setFromQuery(query) {
+                    const found = findMember(membersForChamber(), query);
+                    if (found) {
+                        applyMember(found);
+                        return;
+                    }
+                    input.value = query || '';
+                    syncClear();
+                }
+            };
+        }
+
+        function compareRows() {
+            const votes = votesForChamber();
+            const nameA = selected.a?.name;
+            const nameB = selected.b?.name;
+            if (!nameA && !nameB) return [];
+
+            return votes.map((vote) => {
+                const a = nameA ? getIndexedVote(index.voteLookup, vote, nameA) : 'none';
+                const b = nameB ? getIndexedVote(index.voteLookup, vote, nameB) : 'none';
+                const bothVoted = (a === 'yea' || a === 'nay') && (b === 'yea' || b === 'nay');
+                return { vote, a, b, differ: Boolean(nameA && nameB && bothVoted && a !== b) };
+            }).filter((row) => row.a !== 'none' || row.b !== 'none');
+        }
+
+        function renderVoteCell(result) {
+            return `<td class="compare-vote vote-${result}">${escapeHtml(voteWord(result))}</td>`;
+        }
+
+        function emptyMessage() {
+            const members = membersForChamber();
+            const turek = members.some((m) => m.name === 'Turek');
+            const siegrist = members.some((m) => m.name === 'Siegrist');
+            const example = turek && siegrist
+                ? `<p>Try <button type="button" class="example-btn" onclick="pickExample('Turek','Siegrist')">Turek and Siegrist</button> in the House.</p>`
+                : '';
+            return `
+                <div class="empty-compare">
+                    <p>Pick two legislators to see their floor votes on the same bills. Bill numbers open the Iowa Legislature site; names open Ballotpedia.</p>
+                    ${example}
+                </div>
+            `;
+        }
+
+        function pickExample(a, b) {
+            pickers.a.setFromQuery(a);
+            pickers.b.setFromQuery(b);
+        }
+
+        function renderCompare() {
+            if (!index) return;
+            const container = document.getElementById('compare-container');
+            const stats = document.getElementById('stats');
+            const left = selected.a;
+            const right = selected.b;
+
+            if (!left && !right) {
+                stats.innerHTML = '';
+                container.innerHTML = emptyMessage();
+                return;
+            }
+
+            const rows = compareRows();
+            if (!rows.length) {
+                const names = [left, right].filter(Boolean).map((m) => m.name).join(' and ');
+                stats.innerHTML = '';
+                container.innerHTML = `<div class="empty-compare"><p>No floor votes for ${escapeHtml(names)} in this chamber.</p></div>`;
+                return;
+            }
+
+            let both = 0;
+            let same = 0;
+            rows.forEach((row) => {
+                const bothVoted = (row.a === 'yea' || row.a === 'nay') && (row.b === 'yea' || row.b === 'nay');
+                if (!left || !right || !bothVoted) return;
+                both += 1;
+                if (row.a === row.b) same += 1;
+            });
+
+            const absA = left ? recordedAbsence(index.voteLookup, votesForChamber(), left.name) : null;
+            const absB = right ? recordedAbsence(index.voteLookup, votesForChamber(), right.name) : null;
+            const absBits = [];
+            if (left) absBits.push(`${escapeHtml(left.name)} absent <strong>${escapeHtml(formatAbsenceLong(absA))}</strong>`);
+            if (right) absBits.push(`${escapeHtml(right.name)} absent <strong>${escapeHtml(formatAbsenceLong(absB))}</strong>`);
+
+            let summary = `<span><strong>${rows.length}</strong> bills</span>`;
+            if (left && right && both) {
+                summary += `<span>Same vote on <strong>${same}</strong> of <strong>${both}</strong> bills where both voted yea or nay</span>`;
+                if (same < both) summary += '<span>Bills they voted differently on are marked</span>';
+            } else if (left && right) {
+                summary += '<span>No bills where both voted yea or nay in this chamber</span>';
+            }
+            absBits.forEach((bit) => { summary += `<span>${bit}</span>`; });
+            stats.innerHTML = summary;
+
+            const leftHead = left
+                ? memberLinkHtml(left, memberChamber(left) || currentChamber, `source-link ${partyClass(left)}`)
+                : '—';
+            const rightHead = right
+                ? memberLinkHtml(right, memberChamber(right) || currentChamber, `source-link ${partyClass(right)}`)
+                : '—';
+
+            const body = rows.map((row) => {
+                const bill = row.vote;
+                const differClass = row.differ ? ' class="differ"' : '';
+                const differLabel = row.differ ? '<span class="visually-hidden">Votes differ. </span>' : '';
+                const desc = bill.legislationTitle
+                    ? `<span class="bill-desc">${escapeHtml(bill.legislationTitle)}</span>`
+                    : '';
+                return `
+                    <tr${differClass}>
+                        <th class="compare-bill" scope="row">
+                            ${differLabel}${billLinkHtml(bill.legislation, currentSession, 'bill-id source-link')}
+                            <span class="bill-meta">${escapeHtml(bill.chamber)} · ${escapeHtml(bill.date)}</span>
+                            ${desc}
+                        </th>
+                        ${renderVoteCell(row.a)}
+                        ${renderVoteCell(row.b)}
+                    </tr>
+                `;
+            }).join('');
+
+            const footCell = (member, stats) => {
+                if (!member) return '<td class="compare-vote">–</td>';
+                if (!stats?.recorded) {
+                    return '<td class="compare-vote">–<span class="absence-detail">No recorded votes</span></td>';
+                }
+                return `<td class="compare-vote">${escapeHtml(formatAbsenceShort(stats))}<span class="absence-detail">${stats.absent} of ${stats.recorded} recorded votes</span></td>`;
+            };
+            const footA = footCell(left, absA);
+            const footB = footCell(right, absB);
+
+            container.innerHTML = `
+                <div class="compare-wrap">
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th class="compare-bill" scope="col">Bill</th>
+                                <th class="compare-vote" scope="col">${leftHead}</th>
+                                <th class="compare-vote" scope="col">${rightHead}</th>
+                            </tr>
+                        </thead>
+                        <tbody>${body}</tbody>
+                        <tfoot>
+                            <tr>
+                                <th class="compare-bill" scope="row">Absent / not voting</th>
+                                ${footA}
+                                ${footB}
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+        }
+
+        async function init() {
+            const state = getUrlState();
+            currentSession = state.session;
+            currentChamber = state.chamber;
+            currentCompareA = state.a;
+            currentCompareB = state.b;
+            document.getElementById('session-select').value = currentSession;
+            document.getElementById('page-title').textContent = `Iowa Legislature ${currentSession} Session`;
+            document.getElementById('page-subtitle').textContent = 'Floor votes on bills — compare two legislators';
+            document.title = `Iowa Legislature ${currentSession} - Compare votes`;
+            setChamberUI(currentChamber);
+            setViewUI('compare');
+            setUrlState(currentSession, currentChamber);
+
+            try {
+                await loadVoteData(currentSession);
+                index = createVoteIndex(voteData);
+                pickers.a = createPicker('combo-a', 'member-a', 'a');
+                pickers.b = createPicker('combo-b', 'member-b', 'b');
+                if (state.a) pickers.a.setFromQuery(state.a);
+                if (state.b) pickers.b.setFromQuery(state.b);
+                renderCompare();
+            } catch (error) {
+                document.getElementById('compare-container').innerHTML =
+                    `<div class="loading">Error: could not load ${SESSION_FILES[currentSession]}</div>`;
+            }
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

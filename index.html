@@ -31,6 +31,7 @@
 
         .stats {
             display: flex;
+            flex-wrap: wrap;
             gap: 1.5rem;
         }
 
@@ -107,6 +108,24 @@
             font-weight: 500;
         }
 
+        td.row-header a,
+        th.row-header a,
+        .header-rotated a {
+            color: inherit;
+            text-decoration: none;
+            display: inline;
+            width: auto;
+        }
+
+        td.row-header a:hover,
+        td.row-header a:focus-visible,
+        th.row-header a:hover,
+        th.row-header a:focus-visible,
+        .header-rotated a:hover,
+        .header-rotated a:focus-visible {
+            text-decoration: underline;
+        }
+
         tr.bill-row td {
             height: var(--bill-row-h);
         }
@@ -168,6 +187,29 @@
             font-weight: 500;
         }
 
+        tfoot th,
+        tfoot td {
+            background: var(--bg);
+            font-weight: 600;
+            font-size: 0.6875rem;
+        }
+
+        tfoot .row-header {
+            position: sticky;
+            left: 0;
+            z-index: var(--z-sticky-row);
+            background: var(--bg);
+            font-weight: 600;
+            text-align: left;
+        }
+
+        td.vote-absent-pct {
+            background: var(--absent-bg);
+            color: var(--absent);
+            font-weight: 600;
+            font-size: 0.6875rem;
+        }
+
         th.scroll-pad,
         td.scroll-pad {
             padding: 0;
@@ -208,6 +250,7 @@
                     <button type="button" id="btn-view-table" class="active"
                         onclick="switchView('table')">Table</button>
                     <button type="button" id="btn-view-list" onclick="switchView('list')">List</button>
+                    <button type="button" id="btn-view-compare" onclick="switchView('compare')">Compare</button>
                 </div>
             </div>
 
@@ -223,9 +266,9 @@
             <div class="control-group">
                 <label for="vote-type">Show</label>
                 <select id="vote-type" onchange="renderTable()">
+                    <option value="all" selected>All votes</option>
                     <option value="yeas">Yea votes</option>
                     <option value="nays">Nay votes</option>
-                    <option value="all">All votes</option>
                 </select>
             </div>
 
@@ -296,57 +339,15 @@
         const grid = {
             bills: [],
             members: [],
-            voteType: 'yeas'
+            voteType: 'all',
+            absences: new Map()
         };
 
         function precomputeData() {
-            const votes = voteData.votes || [];
-
-            cache.votesByChamber = {
-                House: [],
-                Senate: [],
-                Both: votes
-            };
-
-            votes.forEach(vote => {
-                if (vote.chamber === 'House') cache.votesByChamber.House.push(vote);
-                else if (vote.chamber === 'Senate') cache.votesByChamber.Senate.push(vote);
-            });
-
-            const memberMaps = { House: new Map(), Senate: new Map(), Both: new Map() };
-
-            votes.forEach(vote => {
-                const voteId = `${vote.chamber}-${vote.legislation}-${vote.date}`;
-                const lookup = new Map();
-
-                const processVoters = (list, voteType) => {
-                    if (!list) return;
-                    list.forEach(m => {
-                        lookup.set(m.name, voteType);
-                        const memberData = { name: m.name, party: m.party, partyAbbr: m.partyAbbr };
-                        memberMaps.Both.set(m.name, memberData);
-                        if (vote.chamber === 'House') memberMaps.House.set(m.name, memberData);
-                        else if (vote.chamber === 'Senate') memberMaps.Senate.set(m.name, memberData);
-                    });
-                };
-
-                processVoters(vote.voteDetails?.yeas, 'yea');
-                processVoters(vote.voteDetails?.nays, 'nay');
-                processVoters(vote.voteDetails?.absentOrNotVoting, 'absent');
-
-                cache.voteLookup.set(voteId, lookup);
-            });
-
-            const sortMembers = (map) => Array.from(map.values()).sort((a, b) => {
-                if (a.partyAbbr !== b.partyAbbr) return a.partyAbbr === 'D' ? -1 : 1;
-                return a.name.localeCompare(b.name);
-            });
-
-            cache.membersByChamber = {
-                House: sortMembers(memberMaps.House),
-                Senate: sortMembers(memberMaps.Senate),
-                Both: sortMembers(memberMaps.Both)
-            };
+            const built = createVoteIndex(voteData);
+            cache.membersByChamber = built.membersByChamber;
+            cache.votesByChamber = built.votesByChamber;
+            cache.voteLookup = built.voteLookup;
         }
 
         function setChamber(chamber) {
@@ -380,9 +381,7 @@
         }
 
         function getMemberVote(vote, memberName) {
-            const voteId = `${vote.chamber}-${vote.legislation}-${vote.date}`;
-            const lookup = cache.voteLookup.get(voteId);
-            return lookup?.get(memberName) || 'none';
+            return getIndexedVote(cache.voteLookup, vote, memberName);
         }
 
         function readMetrics() {
@@ -463,12 +462,17 @@
             grid.bills = bills;
             grid.members = members;
             grid.voteType = voteType;
+            grid.absences = new Map();
+            members.forEach((m) => {
+                grid.absences.set(m.name, recordedAbsence(cache.voteLookup, votes, m.name));
+            });
             metrics = readMetrics();
             lastWindowKey = '';
 
             const scroller = ensureGrid();
             const table = document.getElementById('vote-grid');
-            const colCount = billsOnRows ? members.length : bills.length;
+            const extraCols = billsOnRows ? 0 : 1;
+            const colCount = (billsOnRows ? members.length : bills.length) + extraCols;
             table.style.width = `${metrics.rowHeadW + colCount * metrics.cellW}px`;
             scroller.scrollTop = 0;
             scroller.scrollLeft = 0;
@@ -490,15 +494,16 @@
             const table = document.getElementById('vote-grid');
             if (!wrap || !table || !metrics) return;
 
-            const { bills, members, voteType } = grid;
+            const { bills, members, voteType, absences } = grid;
+            const extraCols = billsOnRows ? 0 : 1;
             const rowItems = billsOnRows ? bills : members;
-            const colItems = billsOnRows ? members : bills;
+            const colCount = (billsOnRows ? members.length : bills.length) + extraCols;
             const rowH = billsOnRows ? metrics.billRowH : metrics.cellH;
             const { cellW, rowHeadW, colHeadH } = metrics;
 
             const colStart = Math.max(0, Math.floor(wrap.scrollLeft / cellW) - OVERSCAN);
             const colEnd = Math.min(
-                colItems.length,
+                colCount,
                 Math.ceil((wrap.scrollLeft + Math.max(wrap.clientWidth - rowHeadW, cellW)) / cellW) + OVERSCAN
             );
             const rowStart = Math.max(0, Math.floor(wrap.scrollTop / rowH) - OVERSCAN);
@@ -507,27 +512,34 @@
                 Math.ceil((wrap.scrollTop + Math.max(wrap.clientHeight - colHeadH, rowH)) / rowH) + OVERSCAN
             );
 
-            const key = `${billsOnRows}|${voteType}|${rowStart}:${rowEnd}|${colStart}:${colEnd}|${rowItems.length}x${colItems.length}`;
+            const key = `${billsOnRows}|${voteType}|${rowStart}:${rowEnd}|${colStart}:${colEnd}|${rowItems.length}x${colCount}`;
             if (key === lastWindowKey) return;
             lastWindowKey = key;
 
             const leftPad = colStart * cellW;
-            const rightPad = (colItems.length - colEnd) * cellW;
+            const rightPad = (colCount - colEnd) * cellW;
             const topPad = rowStart * rowH;
             const bottomPad = (rowItems.length - rowEnd) * rowH;
             const colSpan = 1 + (leftPad > 0.5 ? 1 : 0) + (colEnd - colStart) + (rightPad > 0.5 ? 1 : 0);
+            const memberChamber = currentChamber === 'Both' ? null : currentChamber;
+
+            const absenceHeader = `<th title="Absent / not voting share of recorded votes"><div class="header-rotated">Absent</div></th>`;
+            const absenceCell = (member, tag) => {
+                const stats = absences.get(member.name);
+                return `<${tag} class="vote-absent-pct" title="${escapeHtml(absenceTitle(stats))}">${escapeHtml(formatAbsenceShort(stats))}</${tag}>`;
+            };
 
             const headerCells = [`<th class="corner">${billsOnRows ? 'Bill' : 'Member'}</th>`];
             headerCells.push(padCell('th', leftPad));
             for (let c = colStart; c < colEnd; c += 1) {
                 if (billsOnRows) {
                     const m = members[c];
-                    const partyClass = m.partyAbbr === 'D' ? 'party-d' : m.partyAbbr === 'R' ? 'party-r' : '';
-                    const label = `${escapeHtml(m.name)}${m.partyAbbr ? ` (${escapeHtml(m.partyAbbr)})` : ''}`;
-                    headerCells.push(`<th class="${partyClass}"><div class="header-rotated">${label}</div></th>`);
+                    headerCells.push(`<th class="${partyClass(m)}"><div class="header-rotated">${memberLinkHtml(m, memberChamber)}</div></th>`);
+                } else if (c === bills.length) {
+                    headerCells.push(absenceHeader);
                 } else {
                     const bill = bills[c];
-                    headerCells.push(`<th title="${escapeHtml(bill.title)}"><div class="header-rotated">${escapeHtml(bill.id)}</div></th>`);
+                    headerCells.push(`<th title="${escapeHtml(bill.title)}"><div class="header-rotated">${billLinkHtml(bill.id, currentSession)}</div></th>`);
                 }
             }
             headerCells.push(padCell('th', rightPad));
@@ -541,7 +553,7 @@
             for (let r = rowStart; r < rowEnd; r += 1) {
                 if (billsOnRows) {
                     const bill = bills[r];
-                    const cells = [`<td class="row-header" title="${escapeHtml(bill.title)}">${escapeHtml(bill.id)}<br><span class="bill-title">${escapeHtml(bill.chamber)} - ${escapeHtml(bill.date)}</span></td>`];
+                    const cells = [`<td class="row-header" title="${escapeHtml(bill.title)}">${billLinkHtml(bill.id, currentSession)}<br><span class="bill-title">${escapeHtml(bill.chamber)} - ${escapeHtml(bill.date)}</span></td>`];
                     cells.push(padCell('td', leftPad));
                     for (let c = colStart; c < colEnd; c += 1) {
                         const voteResult = getMemberVote(bill.vote, members[c].name);
@@ -551,12 +563,15 @@
                     rows.push(`<tr${rowClass}>${cells.join('')}</tr>`);
                 } else {
                     const m = members[r];
-                    const partyClass = m.partyAbbr === 'D' ? 'party-d' : m.partyAbbr === 'R' ? 'party-r' : '';
-                    const cells = [`<td class="row-header ${partyClass}">${escapeHtml(m.name)}${m.partyAbbr ? ` (${escapeHtml(m.partyAbbr)})` : ''}</td>`];
+                    const cells = [`<td class="row-header ${partyClass(m)}">${memberLinkHtml(m, memberChamber)}</td>`];
                     cells.push(padCell('td', leftPad));
                     for (let c = colStart; c < colEnd; c += 1) {
-                        const voteResult = getMemberVote(bills[c].vote, m.name);
-                        cells.push(`<td class="${getVoteCellClass(voteResult, voteType)}">${getVoteDisplay(voteResult, voteType)}</td>`);
+                        if (c === bills.length) {
+                            cells.push(absenceCell(m, 'td'));
+                        } else {
+                            const voteResult = getMemberVote(bills[c].vote, m.name);
+                            cells.push(`<td class="${getVoteCellClass(voteResult, voteType)}">${getVoteDisplay(voteResult, voteType)}</td>`);
+                        }
                     }
                     cells.push(padCell('td', rightPad));
                     rows.push(`<tr>${cells.join('')}</tr>`);
@@ -567,6 +582,17 @@
                 rows.push(`<tr class="scroll-pad-row" style="height:${bottomPad}px"><td class="scroll-pad" colspan="${colSpan}"></td></tr>`);
             }
             rows.push('</tbody>');
+
+            if (billsOnRows) {
+                const foot = [`<th class="row-header">Absent / not voting<br><span class="bill-title">Share of recorded votes</span></th>`];
+                foot.push(padCell('td', leftPad));
+                for (let c = colStart; c < colEnd; c += 1) {
+                    foot.push(absenceCell(members[c], 'td'));
+                }
+                foot.push(padCell('td', rightPad));
+                rows.push(`<tfoot><tr>${foot.join('')}</tr></tfoot>`);
+            }
+
             table.innerHTML = rows.join('');
         }
 
@@ -599,6 +625,7 @@
             document.getElementById('page-subtitle').textContent = 'Floor votes on bills — comparison table';
             document.title = `Iowa Legislature ${currentSession} - Floor Votes Table`;
             setChamberUI(currentChamber);
+            setViewUI('table');
             setUrlState(currentSession, currentChamber);
 
             try {

@@ -36,6 +36,12 @@
             font-size: 1.25rem;
             font-weight: 600;
             letter-spacing: -0.02em;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .bill-id:hover {
+            text-decoration: underline;
         }
 
         .bill-meta {
@@ -120,6 +126,11 @@
 
         .voter-tag {
             font-size: 0.8125rem;
+            text-decoration: none;
+        }
+
+        .voter-tag:hover {
+            text-decoration: underline;
         }
 
         .voter-tag.party-d { color: var(--party-d); }
@@ -135,11 +146,6 @@
 
         .voters-group:last-child {
             margin-bottom: 0;
-        }
-
-        .bill-link {
-            font-size: inherit;
-            text-decoration: none;
         }
 
         .collapsible-toggle {
@@ -188,6 +194,7 @@
                 <div class="seg" role="group" aria-labelledby="view-label">
                     <button type="button" id="btn-view-table" onclick="switchView('table')">Table</button>
                     <button type="button" id="btn-view-list" class="active" onclick="switchView('list')">List</button>
+                    <button type="button" id="btn-view-compare" onclick="switchView('compare')">Compare</button>
                 </div>
             </div>
 
@@ -351,7 +358,7 @@
             return `<div class="bill-title">${body}${dates}</div>`;
         }
 
-        function renderVoterTags(voters) {
+        function renderVoterTags(voters, chamber) {
             if (!voters || voters.length === 0) return '<span class="empty-voters">None</span>';
 
             return voters
@@ -361,29 +368,27 @@
                     return a.name.localeCompare(b.name);
                 })
                 .map(v => {
-                    const partyClass = v.partyAbbr ? `party-${v.partyAbbr.toLowerCase()}` : '';
-                    const label = v.partyAbbr
-                        ? `${escapeHtml(v.name)} (${escapeHtml(v.partyAbbr)})`
-                        : escapeHtml(v.name);
-                    return `<span class="voter-tag ${partyClass}">${label}</span>`;
+                    const tagClass = v.partyAbbr ? `voter-tag party-${v.partyAbbr.toLowerCase()}` : 'voter-tag';
+                    return memberLinkHtml(v, chamber, tagClass);
                 })
                 .join('');
         }
 
         function renderVotersSection(vote) {
             const absent = getAbsentVoters(vote);
+            const chamber = vote.chamber;
             return `
                 <div class="voters-group yeas">
                     <h3>Voted yes (${vote.voteDetails?.yeas?.length || 0})</h3>
-                    <div class="voter-list">${renderVoterTags(vote.voteDetails?.yeas)}</div>
+                    <div class="voter-list">${renderVoterTags(vote.voteDetails?.yeas, chamber)}</div>
                 </div>
                 <div class="voters-group nays">
                     <h3>Voted no (${vote.voteDetails?.nays?.length || 0})</h3>
-                    <div class="voter-list">${renderVoterTags(vote.voteDetails?.nays)}</div>
+                    <div class="voter-list">${renderVoterTags(vote.voteDetails?.nays, chamber)}</div>
                 </div>
                 <div class="voters-group absent">
                     <h3>Absent, excused, or not voting (${absent.length})</h3>
-                    <div class="voter-list">${renderVoterTags(absent)}</div>
+                    <div class="voter-list">${renderVoterTags(absent, chamber)}</div>
                 </div>
             `;
         }
@@ -430,18 +435,13 @@
 
             const html = votes.map((vote, index) => {
                 const cardId = `bill-${index}`;
-                const sourceUrl = billBookUrl(vote.legislation, currentSession);
-                const sourceLink = sourceUrl
-                    ? `<a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener" class="bill-link" aria-label="Read ${escapeHtml(vote.legislation)} on legis.iowa.gov">Read the bill</a>`
-                    : '';
                 return `
                     <div class="bill-card ${collapsedClass}" id="${cardId}" data-vote-index="${index}">
                         <div class="bill-header">
                             <div>
-                                <div class="bill-id">${escapeHtml(vote.legislation)}</div>
+                                <div>${billLinkHtml(vote.legislation, currentSession, 'bill-id')}</div>
                                 <div class="bill-meta">
                                     <span>${escapeHtml(vote.date)}</span>
-                                    ${sourceLink}
                                     <button type="button" class="collapsible-toggle" onclick="toggleCard('${cardId}')">${toggleText}</button>
                                 </div>
                             </div>
@@ -489,6 +489,7 @@
             document.getElementById('page-subtitle').textContent = 'Floor votes on bills — bill by bill';
             document.title = `Iowa Legislature ${currentSession} - Bill List`;
             setChamberUI(currentChamber);
+            setViewUI('list');
             setUrlState(currentSession, currentChamber);
 
             try {

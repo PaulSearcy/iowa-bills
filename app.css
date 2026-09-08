@@ -22,6 +22,7 @@
     --z-sticky-row: 5;
     --z-sticky-col: 15;
     --z-sticky-corner: 20;
+    --z-dropdown: 30;
 }
 
 *,
@@ -194,6 +195,9 @@ input[type="text"]::placeholder {
 }
 
 .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
     margin: 0 0 0.75rem;
     color: var(--ink-muted);
     font-size: 0.8125rem;
@@ -253,6 +257,288 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.source-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.source-link:hover,
+.source-link:focus-visible {
+    text-decoration: underline;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.compare-pickers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    margin: 0 0 1rem;
+}
+
+.picker {
+    flex: 1 1 16rem;
+    max-width: 24rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.picker label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+}
+
+.combo {
+    position: relative;
+}
+
+.combo input {
+    width: 100%;
+    padding-right: 2.4rem;
+}
+
+.combo-clear {
+    position: absolute;
+    right: 0.15rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--ink-muted);
+    cursor: pointer;
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.combo-clear:hover {
+    color: var(--ink);
+}
+
+.combo-clear:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.combo-clear[hidden] {
+    display: none;
+}
+
+.combo-list {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 2px);
+    z-index: var(--z-dropdown);
+    margin: 0;
+    padding: 0.2rem 0;
+    list-style: none;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    max-height: 16rem;
+    overflow: auto;
+}
+
+.combo-list[hidden] {
+    display: none;
+}
+
+.combo-option {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0.65rem 0.7rem;
+    border: none;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.875rem;
+    text-align: left;
+    cursor: pointer;
+}
+
+.combo-option:hover,
+.combo-option[aria-selected="true"] {
+    background: var(--accent-soft);
+}
+
+.combo-option.party-d { color: var(--party-d); }
+.combo-option.party-r { color: var(--party-r); }
+
+.combo-empty {
+    padding: 0.55rem 0.7rem;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+}
+
+.empty-compare {
+    padding: 2.5rem 1.15rem;
+    color: var(--ink-muted);
+    max-width: 42rem;
+}
+
+.empty-compare p {
+    margin: 0 0 0.75rem;
+    text-wrap: pretty;
+}
+
+.empty-compare p:last-child {
+    margin-bottom: 0;
+}
+
+.example-btn {
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    color: var(--accent);
+    cursor: pointer;
+}
+
+.example-btn:hover {
+    text-decoration: underline;
+}
+
+.example-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.compare-wrap {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: auto;
+    max-height: 80vh;
+}
+
+.compare-table {
+    width: 100%;
+    min-width: 36rem;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+}
+
+.compare-table th,
+.compare-table td {
+    padding: 0.7rem 0.85rem;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+}
+
+.compare-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    background: var(--bg);
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.compare-table .compare-bill {
+    position: sticky;
+    left: 0;
+    z-index: var(--z-sticky-row);
+    background: var(--surface);
+    width: 46%;
+    min-width: 12rem;
+}
+
+.compare-table thead .compare-bill {
+    z-index: var(--z-sticky-corner);
+    background: var(--bg);
+}
+
+.compare-bill .bill-id {
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.compare-bill .bill-id:hover {
+    text-decoration: underline;
+}
+
+.compare-bill .bill-meta {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.8125rem;
+    color: var(--ink-muted);
+}
+
+.compare-bill .bill-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-top: 0.25rem;
+    max-width: 62ch;
+    font-size: 0.8125rem;
+    color: var(--ink);
+    text-wrap: pretty;
+}
+
+.compare-vote {
+    width: 27%;
+    min-width: 6.5rem;
+    text-align: center;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.compare-table thead .compare-vote {
+    white-space: normal;
+}
+
+.compare-table .source-link.party-d { color: var(--party-d); }
+.compare-table .source-link.party-r { color: var(--party-r); }
+
+.compare-table tfoot th,
+.compare-table tfoot td {
+    background: var(--bg);
+    border-bottom: none;
+    font-weight: 600;
+}
+
+.compare-table tfoot .absence-detail {
+    display: block;
+    margin-top: 0.15rem;
+    font-weight: 400;
+    font-size: 0.8125rem;
+    color: var(--ink-muted);
+}
+
+tr.differ .compare-bill {
+    background: var(--accent-soft);
+}
+
+.compare-table .vote-yea { background: var(--yea-bg); color: var(--yea); }
+.compare-table .vote-nay { background: var(--nay-bg); color: var(--nay); }
+.compare-table .vote-absent { background: var(--absent-bg); color: var(--absent); }
+.compare-table .vote-none { color: var(--ink-muted); font-weight: 400; }
 
 @media (prefers-reduced-motion: reduce) {
     *,
