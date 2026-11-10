@@ -14,7 +14,7 @@
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--text); font: 14px/20px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-  main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 64px; display: flex; flex-direction: column; gap: 28px; }
+  main { max-width: 1180px; margin: 0 auto; padding: 32px 24px 64px; display: flex; flex-direction: column; gap: 28px; }
   h1 { font-size: 24px; line-height: 30px; margin: 0 0 6px; font-weight: 600; }
   h2 { font-size: 18px; line-height: 24px; margin: 0 0 6px; font-weight: 600; }
   h3 { font-size: 15px; margin: 0 0 6px; font-weight: 600; }
@@ -22,7 +22,7 @@
   .small { font-size: 12px; line-height: 16px; }
   .muted { color: var(--text2); } .faint { color: var(--text3); }
   .num { font-variant-numeric: tabular-nums; }
-  .stats { display: grid; grid-template-columns: 1fr 1fr 1fr 2fr; gap: 16px; align-items: center; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 2fr; gap: 16px; align-items: center; }
   .stat .v { font-size: 22px; font-weight: 600; line-height: 28px; }
   .stat .l { font-size: 12px; color: var(--text2); }
   .callout { background: var(--fill); border-radius: 8px; padding: 10px 14px; }
@@ -51,7 +51,20 @@
   .tag { font-size: 11px; color: var(--text3); margin-left: 6px; }
   .party { display: inline-block; min-width: 28px; text-align: center; font-size: 11px; font-weight: 600; border-radius: 4px; padding: 0 4px; color: #fff; }
   .gap-d { color: var(--dem); font-weight: 600; } .gap-r { color: var(--rep); font-weight: 600; }
-  .chart { display: grid; grid-template-columns: 260px 1fr; gap: 10px 12px; align-items: center; }
+  .lose { color: var(--text2); }
+  .flag { display: inline-block; margin-left: 6px; padding: 0 6px; border: 1px solid var(--stroke); border-radius: 999px; font-size: 11px; line-height: 16px; color: var(--text2); }
+  .bar-d { height: 10px; background: var(--dem); border-radius: 2px 0 0 2px; }
+  .bar-r { height: 10px; background: var(--rep); border-radius: 0 2px 2px 0; }
+  .close { display: grid; grid-template-columns: 260px 1fr 190px 200px; gap: 10px 12px; align-items: center; }
+  .close .lab { font-size: 12px; color: var(--text2); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .close .lab b { color: var(--text); font-weight: 600; }
+  .close .hdr { font-size: 11px; color: var(--text3); }
+  .dv { display: flex; align-items: center; height: 14px; }
+  .dv .half { flex: 1; display: flex; }
+  .dv .half.left { justify-content: flex-end; }
+  .dv .axis { width: 1px; height: 16px; background: var(--text3); }
+  .crow { display: contents; } .mlabel { display: none; }
+  .chart { display: grid; grid-template-columns: 260px 1fr 150px; gap: 10px 12px; align-items: center; }
   .chart .lab { font-size: 12px; color: var(--text2); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .chart .lab b { color: var(--text); font-weight: 600; }
   .chart .bars { display: flex; flex-direction: column; gap: 3px; }
@@ -61,27 +74,64 @@
   .chart .b i.out { opacity: 0.4; }
   .chart .b i:last-of-type { border-radius: 0 2px 2px 0; }
   .chart .b span { position: absolute; left: calc(100% + 6px); top: -2px; font-size: 11px; color: var(--text3); white-space: nowrap; }
-  .axisrow { display: grid; grid-template-columns: 260px 1fr; gap: 12px; }
+  .axisrow { display: grid; grid-template-columns: 260px 1fr 150px; gap: 12px; }
   .ticks { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); border-top: 1px solid var(--stroke); padding-top: 4px; }
   .others { display: flex; flex-direction: column; gap: 4px; }
-  @media (max-width: 800px) { .stats { grid-template-columns: 1fr 1fr; } .two { grid-template-columns: 1fr; } .chart, .axisrow { grid-template-columns: 140px 1fr; } }
+  @media (max-width: 800px) {
+    .mlabel { display: inline; }
+    .stats { grid-template-columns: 1fr 1fr; } .stats .callout { grid-column: 1 / -1; }
+    .two { grid-template-columns: 1fr; }
+    .chart, .axisrow { grid-template-columns: 140px 1fr; }
+    .chart .res { grid-column: 2; margin-top: -6px; }
+    .axisrow > :last-child { display: none; }
+    .close { display: flex; flex-direction: column; align-items: stretch; gap: 14px; }
+    .crow { display: grid; grid-template-columns: 1fr auto; gap: 4px 8px; align-items: baseline; }
+    .crow .lab { grid-row: 1; grid-column: 1; text-align: left; white-space: normal; }
+    .crow .res { grid-row: 1; grid-column: 2; text-align: right; }
+    .crow .dv { grid-row: 2; grid-column: 1 / -1; }
+    .crow .mcol { grid-row: 3; grid-column: 1 / -1; }
+    .crow.chead { display: block; } .chead > :not(.dvhead) { display: none; }
+  }
+  .topnav { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--stroke); }
+  .topnav .in { max-width: 1180px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 4px; height: 44px; overflow-x: auto; white-space: nowrap; }
+  .topnav .brand { font-size: 12px; font-weight: 600; color: var(--text2); margin-right: 12px; }
+  .topnav a { color: var(--text2); text-decoration: none; font-size: 13px; padding: 4px 10px; border-radius: 999px; }
+  .topnav a:hover { color: var(--text); background: var(--fill); }
+  .topnav a[aria-current="page"] { color: var(--text); background: var(--fill); font-weight: 600; }
+  @media (max-width: 800px) { .topnav .in { padding: 0 16px; } .topnav .brand { display: none; } }
 </style>
 </head>
 <body>
+<nav class="topnav" aria-label="Iowa 2026 races">
+  <div class="in">
+    <span class="brand">Iowa 2026 campaign money</span>
+    <a href="IAUSSenate2026Spending.html">U.S. Senate</a>
+    <a href="IAUSHouse2026Spending.html" aria-current="page">U.S. House</a>
+    <a href="IASenate2026Spending.html">Iowa Senate</a>
+    <a href="IAHouse2026Spending.html">Iowa House</a>
+  </div>
+</nav>
 <main>
   <section>
-    <h1>Iowa U.S. House 2026: campaign money by district, Republican vs Democrat</h1>
-    <p class="small muted">Source: FEC OpenFEC API (elections summary and Schedule E independent expenditures by candidate), 2026 cycle, pulled Nov 9, 2026. Candidate reports run through the pre-general filings (covering through Oct 14). Party coordinated spending is not included. <a href="IAUSSenate2026Spending.html" style="color:var(--link)">See the U.S. Senate page</a>, <a href="IAHouse2026Spending.html" style="color:var(--link)">the Iowa House page</a>, or <a href="IASenate2026Spending.html" style="color:var(--link)">the Iowa Senate page</a>.</p>
+    <h1>Iowa U.S. House 2026: campaign money and results by district, Republican vs Democrat</h1>
+    <p class="small muted">Money: FEC OpenFEC API (elections summary and Schedule E independent expenditures by candidate), 2026 cycle, pulled Nov 9, 2026. Candidate reports run through the pre-general filings (covering through Oct 14). Party coordinated spending is not included. <a href="IAUSSenate2026Spending.html" style="color:var(--link)">See the U.S. Senate page</a>, <a href="IAHouse2026Spending.html" style="color:var(--link)">the Iowa House page</a>, or <a href="IASenate2026Spending.html" style="color:var(--link)">the Iowa Senate page</a>.</p>
+    <p class="small muted" style="margin-top:6px">Results: <a href="https://electionresults.iowa.gov/IA/127077/web.345435/#/summary" style="color:var(--link)">Iowa SOS unofficial election results</a>, all counties reporting in all four districts, retrieved Nov 10, 2026. Totals can still shift slightly in the county canvass.</p>
   </section>
 
   <section class="stats" id="stats"></section>
+
+  <section>
+    <h2>Results by district</h2>
+    <p class="small muted" style="margin-bottom:12px">All four races, closest first: who won, by how much, and which side had more money (candidates + outside groups).</p>
+    <div class="close" id="close"></div>
+  </section>
 
   <section>
     <div class="controls" style="margin-bottom:6px"><h2 style="margin:0">Money per side, by district</h2><span class="spacer"></span><span id="modePills" class="controls"></span></div>
     <p class="small muted" style="margin-bottom:12px" id="chartNote"></p>
     <div class="legend small muted" style="margin-bottom:10px" id="chartLegend"></div>
     <div class="chart" id="chart"></div>
-    <div class="axisrow" style="margin-top:6px"><div></div><div><div class="ticks" id="ticks"></div><div class="small faint" style="text-align:center;margin-top:2px">Total money (USD)</div></div></div>
+    <div class="axisrow" style="margin-top:6px"><div></div><div><div class="ticks" id="ticks"></div><div class="small faint" style="text-align:center;margin-top:2px">Total money (USD)</div></div><div></div></div>
   </section>
 
   <section class="card">
@@ -101,15 +151,19 @@
       <input id="q" type="search" placeholder="Search name" style="width:200px">
       <select id="sort" style="width:210px">
         <option value="district">Sort: district</option>
+        <option value="votes">Sort: most votes</option>
         <option value="spent">Sort: most spent</option>
         <option value="raised">Sort: most raised</option>
         <option value="cash">Sort: most cash on hand</option>
       </select>
     </div>
-    <div class="legend small muted"><span class="faint">Click a district to open its breakdown above. Primary losers and independents are listed here but not counted in the nominee totals.</span></div>
+    <div class="legend small muted">
+      <span><span class="flag" style="margin-left:0">outspent</span> winner had less money</span>
+      <span class="faint">Click a district to open its breakdown above. Primary losers and independents are listed here but not counted in the nominee totals.</span>
+    </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>District</th><th>Candidate</th><th class="c">Party</th><th class="r">Raised</th><th class="r">Spent</th><th class="r">Cash on hand</th><th>Reports through</th></tr></thead>
+        <thead><tr><th>District</th><th>Candidate</th><th class="c">Party</th><th class="r">Votes</th><th class="r">Result</th><th class="r">Raised</th><th class="r">Spent</th><th class="r">Cash on hand</th><th>Reports through</th></tr></thead>
         <tbody id="rows"></tbody>
       </table>
     </div>
@@ -119,6 +173,9 @@
     <h3>How the totals are built</h3>
     <p class="small muted" style="margin-bottom:6px">Candidate spending is total disbursements by the candidate's principal campaign committee for the full 2026 cycle, primary and general combined. Outside money is independent expenditures reported on FEC Schedule E: spending that supports a candidate or opposes their opponent counts for that candidate's side (pro-D is support for the Democrat plus opposition to the Republican; pro-R is the reverse). Coordinated spending by the national and state parties is not included, nor is spending by groups that is not reported as an independent expenditure (such as issue ads).</p>
     <p class="small faint">Candidate totals stop at the pre-general reports covering through Oct 14. The last three weeks of the race appear in the post-general reports, due Dec 3, 2026. Some report dates for candidates who left the race reflect their last filing, which can be a termination or year-end report.</p>
+    <h3 style="margin-top:12px">How the results are measured</h3>
+    <p class="small muted" style="margin-bottom:6px">The winning margin is the winner's votes minus the runner-up's votes. Points are that margin as a share of all votes cast in the race, write-ins included. Every other candidate on the ballot shows how far behind the winner they finished. "Outspent" marks a winner whose side had less total money (candidates + outside groups) than the loser's.</p>
+    <p class="small faint">Rick Stewart (Libertarian, IA-02) was on the general-election ballot but is not in the FEC data this page was built from, so he appears only in the district breakdown. All four seats were held by Republicans going into the election.</p>
   </section>
 </main>
 
@@ -161,33 +218,87 @@ const CANDIDATES = [
   ["IA-04", "Ryan Melton", "D", 13890, 16787, 0, "2026-06-30"],
   ["IA-04", "Christian Schlaefer", "R", 7710, 5697, 2013, "2025-12-31"],
 ].map(([district, name, party, raised, spent, cash, through, nominee = false, inc = false]) => ({ district, name, party, raised, spent, cash, through, nominee, inc }));
+// General-election ballot: [district, [[name, party, votes], ...], writeInVotes]
+const RESULTS = [
+  ["IA-01", [["Christina Bohannan", "D", 182396], ["Mariannette Miller-Meeks", "R", 150471], ["Michael Bridgford", "Ind", 12603]], 356],
+  ["IA-02", [["Lindsay James", "D", 171484], ["Joe Mitchell", "R", 157722], ["Rick Stewart", "LIB", 9500], ["Dave Bushaw", "Ind", 7469]], 226],
+  ["IA-03", [["Sarah Trone Garriott", "D", 189217], ["Zach Nunn", "R", 163441]], 869],
+  ["IA-04", [["Chris McGowan", "R", 178845], ["Dave Dawson", "D", 123940]], 352],
+];
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const usd = (n) => (n < 0 ? "-$" : "$") + Math.abs(Math.round(n)).toLocaleString("en-US");
 const usdShort = (n) => n >= 1e6 ? `$${(n / 1e6).toFixed(2)}M` : n >= 1e3 ? `$${Math.round(n / 1e3)}K` : usd(n);
 const SURNAMES = { "Sarah Trone Garriott": "Trone Garriott" };
 const lastName = (s) => SURNAMES[s] ?? s.trim().split(/\s+/).pop();
-const PARTY_COLOR = { D: "var(--dem)", R: "var(--rep)", Ind: "var(--ind)" };
+const PARTY_COLOR = { D: "var(--dem)", R: "var(--rep)", Ind: "var(--ind)", LIB: "var(--ind)" };
+const PARTY_CLASS = { D: "gap-d", R: "gap-r" };
 const partyTag = (p) => `<span class="party" style="background:${PARTY_COLOR[p]}">${p}</span>`;
+const num = (n) => Math.round(n).toLocaleString("en-US");
+const pts = (p) => `${p.toFixed(1)} pts`;
+
+const BALLOT = new Map();
+const RACES = Object.fromEntries(RESULTS.map(([district, field, writeIn]) => {
+  const list = field.map(([name, party, votes]) => ({ name, party, votes })).sort((a, b) => b.votes - a.votes);
+  const cast = list.reduce((s, c) => s + c.votes, 0) + writeIn;
+  const [winner, runnerUp] = list;
+  const margin = winner.votes - runnerUp.votes;
+  for (const c of list) {
+    c.won = c === winner;
+    c.by = c.won ? margin : winner.votes - c.votes;
+    c.pct = (c.votes / cast) * 100;
+    c.byPct = (c.by / cast) * 100;
+    BALLOT.set(c.name, c);
+  }
+  return [district, { list, writeIn, cast, winner, margin, marginPct: (margin / cast) * 100 }];
+}));
+for (const c of CANDIDATES) c.ballot = BALLOT.get(c.name) ?? null;
 
 const DISTRICTS = NOMINEES.map(([district, dn, ds, dio, rn, rs, rio, rInc]) => {
-  const D = { name: dn, spent: ds, outside: dio, total: ds + dio, inc: false };
-  const R = { name: rn, spent: rs, outside: rio, total: rs + rio, inc: rInc };
-  const others = CANDIDATES.filter((c) => c.district === district && !c.nominee);
+  const D = { name: dn, party: "D", spent: ds, outside: dio, total: ds + dio, inc: false, res: BALLOT.get(dn) };
+  const R = { name: rn, party: "R", spent: rs, outside: rio, total: rs + rio, inc: rInc, res: BALLOT.get(rn) };
+  const race = RACES[district];
+  const others = CANDIDATES.filter((c) => c.district === district && !c.nominee && !c.ballot);
+  const ballotOthers = race.list.filter((c) => c.name !== dn && c.name !== rn);
   const allD = CANDIDATES.filter((c) => c.district === district && c.party === "D").reduce((s, c) => s + c.spent, 0);
   const allR = CANDIDATES.filter((c) => c.district === district && c.party === "R").reduce((s, c) => s + c.spent, 0);
-  return { district, D, R, others, allD, allR, candGap: ds - rs, gap: D.total - R.total };
+  const gap = D.total - R.total;
+  return {
+    district, D, R, others, ballotOthers, allD, allR, candGap: ds - rs, gap, ...race,
+    outspent: Math.round(gap) !== 0 && (gap > 0) !== (race.winner.party === "D"),
+  };
 });
 const gapHtml = (g) => Math.round(g) === 0 ? '<span class="faint">even</span>'
   : `<span class="num ${g > 0 ? "gap-d" : "gap-r"}">${g > 0 ? "D" : "R"} +${usd(Math.abs(g))}</span>`;
+const resultHtml = (d) => `<span class="num ${PARTY_CLASS[d.winner.party]}">${d.winner.party} +${num(d.margin)}</span> <span class="small faint num">(${pts(d.marginPct)})</span>`;
+const outspentTag = (d) => d.outspent ? '<span class="flag" title="The winner had less money than the loser">outspent</span>' : "";
+const byHtml = (b, unit = "") => `<span class="${b.won ? PARTY_CLASS[b.party] : "lose"}" style="font-weight:600">${b.won ? "Won" : "Lost"} by ${num(b.by)}${unit}</span> <span class="small faint num">(${pts(b.byPct)})</span>`;
 
 // Stats
 const sumD = DISTRICTS.reduce((s, d) => s + d.D.total, 0), sumR = DISTRICTS.reduce((s, d) => s + d.R.total, 0);
+const seats = (p) => DISTRICTS.filter((d) => d.winner.party === p).length;
+const decided = DISTRICTS.filter((d) => Math.round(d.gap) !== 0);
 document.getElementById("stats").innerHTML = `
+  <div class="stat"><div class="v"><span style="color:var(--rep)">${seats("R")}</span> <span class="faint">/</span> <span style="color:var(--dem)">${seats("D")}</span></div><div class="l">U.S. House seats won, Republican / Democrat</div></div>
   <div class="stat"><div class="v" style="color:var(--rep)">${usdShort(sumR)}</div><div class="l">Pro-Republican money, all 4 districts (candidates + outside)</div></div>
   <div class="stat"><div class="v" style="color:var(--dem)">${usdShort(sumD)}</div><div class="l">Pro-Democratic money, all 4 districts (candidates + outside)</div></div>
-  <div class="stat"><div class="v">${DISTRICTS.filter((d) => d.gap > 0).length} of ${DISTRICTS.length}</div><div class="l">Districts where Democrats had more, counting outside money</div></div>
+  <div class="stat"><div class="v">${decided.filter((d) => !d.outspent).length} of ${decided.length}</div><div class="l">Races won by the side with more money, counting outside groups</div></div>
   <div class="callout"><b>Totals stop around Oct 14</b><span class="muted">The final three weeks of the campaign appear in the post-general reports due Dec 3, so every number here will go up.</span></div>`;
+
+// Results
+const closeRaces = [...DISTRICTS].sort((a, b) => a.marginPct - b.marginPct);
+const closeMax = Math.max(...closeRaces.map((d) => d.marginPct));
+const closeBar = (d) => {
+  const bar = `<span class="${d.winner.party === "D" ? "bar-d" : "bar-r"}" style="width:${(d.marginPct / closeMax) * 100}%;min-width:2px"></span>`;
+  return `<div class="dv"><span class="half left">${d.winner.party === "D" ? bar : ""}</span><span class="axis"></span><span class="half">${d.winner.party === "R" ? bar : ""}</span></div>`;
+};
+document.getElementById("close").innerHTML = `
+  <div class="crow chead"><div></div><div class="hdr dvhead" style="display:flex;justify-content:space-between"><span>Democrat won</span><span>Republican won</span></div><div class="hdr">Winning margin</div><div class="hdr mcol">Which side had more money</div></div>
+  ${closeRaces.map((d) => `<div class="crow">
+  <div class="lab" title="${d.district}: ${esc(d.D.name)} / ${esc(d.R.name)}"><b class="hd" data-d="${d.district}">${d.district}</b>: ${esc(lastName(d.D.name))} / ${esc(lastName(d.R.name))}</div>
+  ${closeBar(d)}
+  <div class="small res"><span class="num ${PARTY_CLASS[d.winner.party]}">${esc(lastName(d.winner.name))} by ${num(d.margin)}</span> <span class="faint num">(${pts(d.marginPct)})</span></div>
+  <div class="small mcol"><span class="muted mlabel">More money: </span>${gapHtml(d.gap)}${outspentTag(d)}</div></div>`).join("")}`;
 
 // Chart
 const MODES = [["total", "Candidates + outside"], ["cand", "Candidates only"]];
@@ -212,7 +323,8 @@ function renderChart() {
       <span>${usd(val(s))}</span></div>`;
   document.getElementById("chart").innerHTML = DISTRICTS.map((d) => `
     <div class="lab" title="${d.district}: ${esc(d.D.name)} / ${esc(d.R.name)}"><b>${d.district}</b>: ${esc(lastName(d.D.name))} / ${esc(lastName(d.R.name))}</div>
-    <div class="bars">${bar(d.D, "var(--dem)")}${bar(d.R, "var(--rep)")}</div>`).join("");
+    <div class="bars">${bar(d.D, "var(--dem)")}${bar(d.R, "var(--rep)")}</div>
+    <div class="small res">${resultHtml(d)}</div>`).join("");
   const steps = cmax / step;
   document.getElementById("ticks").innerHTML = Array.from({ length: steps + 1 }, (_, i) => `<span>${usdShort(step * i)}</span>`).join("");
   // Bars are scaled to 85% of the row so their value labels fit; the axis matches that width.
@@ -228,6 +340,9 @@ const sideHtml = (label, s, opp) => {
   return `
   <div style="display:flex;flex-direction:column;gap:8px">
     <p class="small faint">${label}</p><p style="font-weight:600">${esc(s.name)}${s.inc ? '<span class="tag">incumbent</span>' : ""}</p>
+    <p class="small">${byHtml(s.res, " votes")}</p>
+    <div class="line small"><span class="muted">Votes</span><span class="num">${num(s.res.votes)} (${s.res.pct.toFixed(1)}%)</span></div>
+    <hr>
     <div class="line small"><span class="muted">Raised</span><span class="num">${usd(c.raised)}</span></div>
     <div class="line small"><span class="muted">Cash on hand (Oct 14)</span><span class="num">${usd(c.cash)}</span></div>
     <hr>
@@ -239,13 +354,21 @@ const sideHtml = (label, s, opp) => {
 function select(district) {
   const d = DISTRICTS.find((x) => x.district === district);
   pick.value = d.district;
-  document.getElementById("pickGap").innerHTML = `<span class="small muted">Campaigns only</span> ${gapHtml(d.candGap)} <span class="small muted" style="margin-left:10px">With outside money</span> ${gapHtml(d.gap)}`;
+  document.getElementById("pickGap").innerHTML = `<span class="small muted">Result</span> ${resultHtml(d)}${outspentTag(d)} <span class="small muted" style="margin-left:14px">Campaigns only</span> ${gapHtml(d.candGap)} <span class="small muted" style="margin-left:10px">With outside money</span> ${gapHtml(d.gap)}`;
   document.getElementById("detail").innerHTML = sideHtml("Democrat", d.D, d.R.total) + sideHtml("Republican", d.R, d.D.total);
   const others = [...d.others].sort((a, b) => b.spent - a.spent);
+  const fec = (name) => CANDIDATES.find((c) => c.name === name);
+  const nameHtml = (party, name) => `<span>${partyTag(party)} <span style="margin-left:6px">${esc(name)}</span></span>`;
   document.getElementById("others").innerHTML = `
     <div class="others small">
-      <p class="faint">Other candidates in this race (primary losers and independents)</p>
-      ${others.map((c) => `<div class="line"><span>${partyTag(c.party)} <span style="margin-left:6px">${esc(c.name)}</span></span><span class="num muted">${usd(c.spent)} spent</span></div>`).join("")}
+      ${d.ballotOthers.length ? `<p class="faint">Also on the general-election ballot</p>
+      ${d.ballotOthers.map((b) => `<div class="line">${nameHtml(b.party, b.name)}<span class="num muted">${num(b.votes)} votes (${b.pct.toFixed(1)}%), ${byHtml(b)}${fec(b.name) ? `, ${usd(fec(b.name).spent)} spent` : ""}</span></div>`).join("")}
+      <hr>` : ""}
+      ${others.length ? `<p class="faint">Ran in the primary or left the race</p>
+      ${others.map((c) => `<div class="line">${nameHtml(c.party, c.name)}<span class="num muted">${usd(c.spent)} spent</span></div>`).join("")}
+      <hr>` : ""}
+      <div class="line"><span class="muted">Write-in votes</span><span class="num">${num(d.writeIn)}</span></div>
+      <div class="line"><span class="muted">Total votes cast</span><span class="num">${num(d.cast)}</span></div>
       <hr>
       <div class="line"><span class="muted">All Democratic candidates, campaign spending</span><span class="num">${usd(d.allD)}</span></div>
       <div class="line"><span class="muted">All Republican candidates, campaign spending</span><span class="num">${usd(d.allR)}</span></div>
@@ -256,8 +379,8 @@ pick.addEventListener("change", () => select(pick.value));
 
 // Table
 const state = { filter: "all", sort: "district", q: "" };
-const FILTERS = [["all", "All"], ...DISTRICTS.map((d) => [d.district, d.district]), ["nominee", "Nominees only"]];
-const matches = (c, k) => k === "all" || (k === "nominee" ? c.nominee : c.district === k);
+const FILTERS = [["all", "All"], ...DISTRICTS.map((d) => [d.district, d.district]), ["nominee", "Nominees only"], ["ballot", "On the Nov. ballot"]];
+const matches = (c, k) => k === "all" || (k === "nominee" ? c.nominee : k === "ballot" ? !!c.ballot : c.district === k);
 const pills = document.getElementById("pills");
 function renderPills() {
   pills.innerHTML = FILTERS.map(([k, l]) => `<button class="pill${state.filter === k ? " active" : ""}" data-k="${k}">${l} (${CANDIDATES.filter((c) => matches(c, k)).length})</button>`).join("");
@@ -265,6 +388,7 @@ function renderPills() {
 pills.addEventListener("click", (e) => { const k = e.target.dataset?.k; if (k) { state.filter = k; renderPills(); renderRows(); } });
 const SORTS = {
   district: (a, b) => a.district.localeCompare(b.district) || b.nominee - a.nominee || b.spent - a.spent,
+  votes: (a, b) => (b.ballot?.votes ?? -1) - (a.ballot?.votes ?? -1),
   spent: (a, b) => b.spent - a.spent,
   raised: (a, b) => b.raised - a.raised,
   cash: (a, b) => b.cash - a.cash,
@@ -278,19 +402,23 @@ function renderRows() {
     <td><span class="hd num" data-d="${c.district}">${c.district}</span></td>
     <td>${c.nominee ? `<b>${esc(c.name)}</b>` : esc(c.name)}${c.nominee ? `<span class="tag">nominee${c.inc ? ", incumbent" : ""}</span>` : ""}</td>
     <td class="c">${partyTag(c.party)}</td>
+    <td class="r num">${c.ballot ? num(c.ballot.votes) : ""}</td>
+    <td class="r">${c.ballot ? byHtml(c.ballot) + (c.ballot.won ? outspentTag(DISTRICTS.find((d) => d.district === c.district)) : "") : '<span class="faint">not on Nov. ballot</span>'}</td>
     <td class="r num">${usd(c.raised)}</td>
     <td class="r num">${usd(c.spent)}</td>
     <td class="r num">${usd(c.cash)}</td>
-    <td class="num faint">${c.through}</td></tr>`).join("") || '<tr><td colspan="7" class="faint">No matching candidates.</td></tr>';
+    <td class="num faint">${c.through}</td></tr>`).join("") || '<tr><td colspan="9" class="faint">No matching candidates.</td></tr>';
 }
-document.getElementById("rows").addEventListener("click", (e) => {
+const openDistrict = (e) => {
   const d = e.target.dataset?.d;
   if (d) { select(d); pick.scrollIntoView({ behavior: "smooth", block: "center" }); }
-});
+};
+document.getElementById("rows").addEventListener("click", openDistrict);
+document.getElementById("close").addEventListener("click", openDistrict);
 document.getElementById("q").addEventListener("input", (e) => { state.q = e.target.value; renderRows(); });
 document.getElementById("sort").addEventListener("change", (e) => { state.sort = e.target.value; renderRows(); });
 
-renderChart(); renderPills(); renderRows(); select("IA-01");
+renderChart(); renderPills(); renderRows(); select(closeRaces[0].district);
 })();
 </script>
 </body>

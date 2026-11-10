@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Iowa U.S. Senate 2026: Turek vs Hinson Campaign Money</title>
+<title>Iowa U.S. Senate 2026: Turek vs Hinson Campaign Money and Results</title>
 <style>
   :root {
     --text: #1d1d1f; --text2: #555a63; --text3: #8a8f98; --bg: #ffffff; --fill: #f4f5f7;
@@ -22,7 +22,7 @@
   .small { font-size: 12px; line-height: 16px; }
   .muted { color: var(--text2); } .faint { color: var(--text3); }
   .num { font-variant-numeric: tabular-nums; }
-  .stats { display: grid; grid-template-columns: 1fr 1fr 1fr 2fr; gap: 16px; align-items: center; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 2fr; gap: 16px; align-items: center; }
   .stat .v { font-size: 22px; font-weight: 600; line-height: 28px; }
   .stat .l { font-size: 12px; color: var(--text2); }
   .callout { background: var(--fill); border-radius: 8px; padding: 10px 14px; }
@@ -51,7 +51,11 @@
   .tag { font-size: 11px; color: var(--text3); margin-left: 6px; }
   .party { display: inline-block; min-width: 28px; text-align: center; font-size: 11px; font-weight: 600; border-radius: 4px; padding: 0 4px; color: #fff; }
   .gap-d { color: var(--dem); font-weight: 600; } .gap-r { color: var(--rep); font-weight: 600; }
+  .lose { color: var(--text2); }
+  .pilltag { display: inline-block; margin-left: 6px; padding: 0 6px; border: 1px solid var(--stroke); border-radius: 999px; font-size: 11px; line-height: 16px; color: var(--text2); }
   .chart { display: grid; grid-template-columns: 260px 1fr; gap: 10px 12px; align-items: center; }
+  .chart.res3, .axisrow.res3 { grid-template-columns: 260px 1fr 170px; }
+  .chart .res { font-size: 12px; white-space: nowrap; }
   .chart .lab { font-size: 12px; color: var(--text2); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .chart .lab b { color: var(--text); font-weight: 600; }
   .chart .b { height: 18px; display: flex; position: relative; }
@@ -63,24 +67,55 @@
   .axisrow { display: grid; grid-template-columns: 260px 1fr; gap: 12px; }
   .ticks { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); border-top: 1px solid var(--stroke); padding-top: 4px; }
   .others { display: flex; flex-direction: column; gap: 4px; }
-  @media (max-width: 800px) { .stats { grid-template-columns: 1fr 1fr; } .two { grid-template-columns: 1fr; } .chart, .axisrow { grid-template-columns: 140px 1fr; } }
+  @media (max-width: 800px) {
+    .stats { grid-template-columns: 1fr 1fr; } .stats .callout { grid-column: 1 / -1; }
+    .two { grid-template-columns: 1fr; }
+    .chart, .axisrow, .chart.res3, .axisrow.res3 { grid-template-columns: 140px 1fr; }
+    .chart .res { grid-column: 2; margin-top: -6px; white-space: normal; }
+    .card-h { flex-direction: column; gap: 4px; }
+  }
+  .topnav { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--stroke); }
+  .topnav .in { max-width: 1180px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 4px; height: 44px; overflow-x: auto; white-space: nowrap; }
+  .topnav .brand { font-size: 12px; font-weight: 600; color: var(--text2); margin-right: 12px; }
+  .topnav a { color: var(--text2); text-decoration: none; font-size: 13px; padding: 4px 10px; border-radius: 999px; }
+  .topnav a:hover { color: var(--text); background: var(--fill); }
+  .topnav a[aria-current="page"] { color: var(--text); background: var(--fill); font-weight: 600; }
+  @media (max-width: 800px) { .topnav .in { padding: 0 16px; } .topnav .brand { display: none; } }
 </style>
 </head>
 <body>
+<nav class="topnav" aria-label="Iowa 2026 races">
+  <div class="in">
+    <span class="brand">Iowa 2026 campaign money</span>
+    <a href="IAUSSenate2026Spending.html" aria-current="page">U.S. Senate</a>
+    <a href="IAUSHouse2026Spending.html">U.S. House</a>
+    <a href="IASenate2026Spending.html">Iowa Senate</a>
+    <a href="IAHouse2026Spending.html">Iowa House</a>
+  </div>
+</nav>
 <main>
   <section>
-    <h1>Iowa U.S. Senate 2026: campaign money, Josh Turek vs Ashley Hinson</h1>
-    <p class="small muted">Source: FEC OpenFEC API (elections summary, candidate totals, and Schedule E independent expenditures by candidate), 2026 cycle, pulled Nov 9, 2026. Candidate reports run through the pre-general filings (covering through Oct 14). Open seat (Joni Ernst did not seek re-election). Party coordinated spending is not included. <a href="IAUSHouse2026Spending.html" style="color:var(--link)">See the U.S. House page</a>, <a href="IAHouse2026Spending.html" style="color:var(--link)">the Iowa House page</a>, or <a href="IASenate2026Spending.html" style="color:var(--link)">the Iowa Senate page</a>.</p>
+    <h1>Iowa U.S. Senate 2026: campaign money and results, Josh Turek vs Ashley Hinson</h1>
+    <p class="small muted">Money: FEC OpenFEC API (elections summary, candidate totals, and Schedule E independent expenditures by candidate), 2026 cycle, pulled Nov 9, 2026. Candidate reports run through the pre-general filings (covering through Oct 14). Open seat (Joni Ernst did not seek re-election). Party coordinated spending is not included. <a href="IAUSHouse2026Spending.html" style="color:var(--link)">See the U.S. House page</a>, <a href="IAHouse2026Spending.html" style="color:var(--link)">the Iowa House page</a>, or <a href="IASenate2026Spending.html" style="color:var(--link)">the Iowa Senate page</a>.</p>
+    <p class="small muted" style="margin-top:6px">Results: <a href="https://electionresults.iowa.gov/IA/127077/web.345435/#/summary" style="color:var(--link)">Iowa SOS unofficial election results</a>, 95 of 99 counties fully reported, retrieved Nov 10, 2026. Totals can still shift slightly in the county canvass.</p>
   </section>
 
   <section class="stats" id="stats"></section>
 
   <section>
+    <h2>Result</h2>
+    <p class="small muted" style="margin-bottom:12px">Statewide votes for each candidate on the general-election ballot, and how far each finished ahead of or behind the next-closest candidate.</p>
+    <div class="chart res3" id="voteChart"></div>
+    <div class="axisrow res3" style="margin-top:6px"><div></div><div><div class="ticks" id="voteTicks"></div><div class="small faint" style="text-align:center;margin-top:2px">Votes</div></div><div></div></div>
+    <p class="small faint" style="margin-top:8px" id="voteNote"></p>
+  </section>
+
+  <section>
     <div class="controls" style="margin-bottom:6px"><h2 style="margin:0">Money per side</h2><span class="spacer"></span><span id="modePills" class="controls"></span></div>
     <p class="small muted" style="margin-bottom:12px" id="chartNote"></p>
     <div class="legend small muted" style="margin-bottom:10px" id="chartLegend"></div>
-    <div class="chart" id="chart"></div>
-    <div class="axisrow" style="margin-top:6px"><div></div><div><div class="ticks" id="ticks"></div><div class="small faint" style="text-align:center;margin-top:2px">Total money (USD)</div></div></div>
+    <div class="chart res3" id="chart"></div>
+    <div class="axisrow res3" style="margin-top:6px"><div></div><div><div class="ticks" id="ticks"></div><div class="small faint" style="text-align:center;margin-top:2px">Total money (USD)</div></div><div></div></div>
   </section>
 
   <section class="card">
@@ -128,6 +163,9 @@
     <h3>How the totals are built</h3>
     <p class="small muted" style="margin-bottom:6px">Candidate spending is total disbursements by the nominee's principal campaign committee for the 2025–2026 cycle, primary and general combined. Hinson's Senate committee is her former U.S. House committee, so only activity since Jan 1, 2025 is counted; Turek's committee began reporting Jul 1, 2025. Raised includes transfers from joint fundraising committees, which FEC lists separately. Outside money is independent expenditures reported on FEC Schedule E: spending that supports a nominee or opposes their opponent counts for that nominee's side. Coordinated spending by the national and state parties is not included, nor is spending by groups that is not reported as an independent expenditure (such as issue ads).</p>
     <p class="small faint">Outside spending covers the whole cycle, so some of it was spent during the primaries. Not counted for either side: $232,500 by Iowa Action supporting Zach Wahls in the Democratic primary, and $15,476 by Indivisible Action opposing Joni Ernst before she left the race. Candidate totals stop at the pre-general reports covering through Oct 14; the last three weeks appear in the post-general reports, due Dec 3, 2026. Independent expenditures are reported within 24–48 hours, so those run closer to Election Day.</p>
+    <h3 style="margin-top:12px">How the results are measured</h3>
+    <p class="small muted" style="margin-bottom:6px">The winning margin is the winner's votes minus the runner-up's votes. Points are that margin as a share of all votes cast in the race, write-ins included. A candidate who lost shows how far behind the winner they finished. Money per vote is the side's total money (campaign + outside groups) divided by the votes that nominee received.</p>
+    <p class="small faint">Sage, Carlin, Norris and Scholten did not reach the general-election ballot, so they have no general-election votes.</p>
   </section>
 </main>
 
@@ -143,6 +181,9 @@ const CANDIDATES = [
   ["J.D. Scholten", "D", 213415, 205271, 8144, "2025-12-31"],
   ["Thomas Laehn", "L", 61146, 66668, 9035, "2026-10-14"],
 ].map(([name, party, raised, spent, cash, through, nominee = false, transfers = 0]) => ({ name, party, raised, spent, cash, through, nominee, transfers }));
+// General-election votes, Iowa SOS unofficial results
+const VOTES = { "Josh Turek": 686486, "Ashley Hinson": 630615, "Thomas Laehn": 42052 };
+const WRITE_IN = 1686;
 
 // [group, supportTurek, opposeHinson, supportHinson, opposeTurek]
 const GROUPS = [
@@ -184,6 +225,28 @@ const partyTag = (p) => `<span class="party" style="background:${PARTY_COLOR[p]}
 const gapHtml = (g, [dLabel, rLabel] = ["Turek", "Hinson"]) => Math.round(g) === 0 ? '<span class="faint">even</span>'
   : `<span class="num ${g > 0 ? "gap-d" : "gap-r"}">${g > 0 ? dLabel : rLabel} +${usd(Math.abs(g))}</span>`;
 const sum = (k) => GROUPS.reduce((s, g) => s + g[k], 0);
+const num = (n) => Math.round(n).toLocaleString("en-US");
+const numShort = (n) => n >= 1e3 ? `${Math.round(n / 1e3)}K` : num(n);
+const pts = (p) => `${p.toFixed(1)} pts`;
+const last = (s) => s.split(" ").pop();
+const PARTY_CLASS = { D: "gap-d", R: "gap-r", L: "" };
+
+const ballot = CANDIDATES.filter((c) => c.name in VOTES).sort((a, b) => VOTES[b.name] - VOTES[a.name]);
+const cast = ballot.reduce((s, c) => s + VOTES[c.name], 0) + WRITE_IN;
+const [winner, runnerUp] = ballot;
+const margin = VOTES[winner.name] - VOTES[runnerUp.name];
+for (const c of ballot) {
+  c.votes = VOTES[c.name];
+  c.won = c === winner;
+  c.by = c.won ? margin : winner.votes - c.votes;
+  c.pct = (c.votes / cast) * 100;
+  c.byPct = (c.by / cast) * 100;
+}
+const marginPct = (margin / cast) * 100;
+const byHtml = (c) => c.won
+  ? `<span class="num ${PARTY_CLASS[c.party]}">Won by ${num(c.by)}</span> <span class="faint num">(${pts(c.byPct)})</span>`
+  : `<span class="num lose">Lost by ${num(c.by)}</span> <span class="faint num">(${pts(c.byPct)})</span>`;
+const resultHtml = `<span class="num ${PARTY_CLASS[winner.party]}">${last(winner.name)} +${num(margin)}</span> <span class="small faint num">(${pts(marginPct)})</span>`;
 
 const turekC = CANDIDATES.find((c) => c.name === "Josh Turek");
 const hinsonC = CANDIDATES.find((c) => c.name === "Ashley Hinson");
@@ -193,13 +256,28 @@ const SIDES = {
 };
 for (const s of Object.values(SIDES)) { s.outside = s.support + s.attack; s.total = s.spent + s.outside; }
 const { D, R } = SIDES;
+const moneyWinner = D.total > R.total ? D : R;
+const outspent = moneyWinner.name !== winner.name;
+const outspentTag = outspent ? '<span class="pilltag" title="The winner had less money than the loser">outspent</span>' : "";
 
 // Stats
 document.getElementById("stats").innerHTML = `
+  <div class="stat"><div class="v num ${PARTY_CLASS[winner.party]}">+${num(margin)}</div><div class="l">${esc(last(winner.name))}'s winning margin in votes (${pts(marginPct)}, ${winner.pct.toFixed(1)}% to ${runnerUp.pct.toFixed(1)}%)</div></div>
   <div class="stat"><div class="v" style="color:var(--rep)">${usdShort(R.total)}</div><div class="l">Pro-Hinson money (campaign + outside groups)</div></div>
   <div class="stat"><div class="v" style="color:var(--dem)">${usdShort(D.total)}</div><div class="l">Pro-Turek money (campaign + outside groups)</div></div>
   <div class="stat"><div class="v">${usdShort(D.total + R.total)}</div><div class="l">Combined, both nominees and their outside allies</div></div>
-  <div class="callout"><b>Campaign totals stop around Oct 14</b><span class="muted">The final three weeks of candidate spending appear in the post-general reports due Dec 3, so these numbers will go up.</span></div>`;
+  <div class="callout"><b>Campaign totals stop around Oct 14</b><span class="muted">The final three weeks of candidate spending appear in the post-general reports due Dec 3, so these money numbers will go up.</span></div>`;
+
+// Result
+const vstep = 200e3;
+const vmax = Math.ceil(winner.votes / vstep) * vstep;
+document.getElementById("voteChart").innerHTML = ballot.map((c) => `
+  <div class="lab"><b>${esc(c.name)}</b> (${c.party})</div>
+  <div class="b" style="width:${(c.votes / vmax) * 85}%"><i style="width:100%;background:${PARTY_COLOR[c.party]}"></i><span>${num(c.votes)} (${c.pct.toFixed(1)}%)</span></div>
+  <div class="res">${byHtml(c)}</div>`).join("");
+document.getElementById("voteTicks").innerHTML = Array.from({ length: vmax / vstep + 1 }, (_, i) => `<span>${numShort(vstep * i)}</span>`).join("");
+document.getElementById("voteTicks").style.width = "85%";
+document.getElementById("voteNote").textContent = `Write-in votes: ${num(WRITE_IN)} (${((WRITE_IN / cast) * 100).toFixed(1)}%). Total votes cast: ${num(cast)}. ${last(moneyWinner.name)}'s side had more money ${outspent ? "but lost" : "and won"}.`;
 
 // Main chart
 const MODES = [["total", "Campaign + outside"], ["cand", "Campaigns only"]];
@@ -223,8 +301,8 @@ function renderChart() {
       <i style="width:${(s.spent / val(s)) * 100}%;background:${color}"></i>${withOutside && s.outside ? `<i class="out" style="width:${(s.outside / val(s)) * 100}%;background:${color}"></i>` : ""}
       <span>${usd(val(s))}</span></div>`;
   document.getElementById("chart").innerHTML = `
-    <div class="lab"><b>Josh Turek</b> (D)</div>${bar(D, "var(--dem)")}
-    <div class="lab"><b>Ashley Hinson</b> (R)</div>${bar(R, "var(--rep)")}`;
+    <div class="lab"><b>Josh Turek</b> (D)</div>${bar(D, "var(--dem)")}<div class="res">${byHtml(D)}</div>
+    <div class="lab"><b>Ashley Hinson</b> (R)</div>${bar(R, "var(--rep)")}<div class="res">${byHtml(R)}</div>`;
   const steps = cmax / step;
   document.getElementById("ticks").innerHTML = Array.from({ length: steps + 1 }, (_, i) => `<span>${usdShort(step * i)}</span>`).join("");
   // Bars are scaled to 85% of the row so their value labels fit; the axis matches that width.
@@ -236,6 +314,9 @@ modePills.addEventListener("click", (e) => { const k = e.target.dataset?.k; if (
 const sideHtml = (label, s, oppName, opp) => `
   <div style="display:flex;flex-direction:column;gap:8px">
     <p class="small faint">${label}</p><p style="font-weight:600">${esc(s.name)}<span class="tag">open seat</span></p>
+    <p class="small"><span class="${s.won ? PARTY_CLASS[s.party] : "lose"}" style="font-weight:600">${s.won ? "Won" : "Lost"} by ${num(s.by)} votes</span> <span class="faint num">(${pts(s.byPct)})</span></p>
+    <div class="line small"><span class="muted">Votes</span><span class="num">${num(s.votes)} (${s.pct.toFixed(1)}%)</span></div>
+    <hr>
     <div class="line small"><span class="muted">Raised</span><span class="num">${usd(s.raised)}</span></div>
     <div class="line small sub"><span class="faint">of which, transfers from joint fundraising committees</span><span class="num faint">${usd(s.transfers)}</span></div>
     <div class="line small"><span class="muted">Cash on hand (Oct 14)</span><span class="num">${usd(s.cash)}</span></div>
@@ -243,17 +324,18 @@ const sideHtml = (label, s, oppName, opp) => `
     <div class="line small"><span class="muted">Candidate committee spending</span><span class="num">${usd(s.spent)}</span></div>
     <div class="line small"><span class="muted">Outside groups supporting ${esc(s.name.split(" ").pop())}</span><span class="num">${usd(s.support)}</span></div>
     <div class="line small"><span class="muted">Outside groups attacking ${esc(oppName)}</span><span class="num">${usd(s.attack)}</span></div>
-    <hr><div class="line" style="font-weight:600"><span>Total</span><span class="num" style="color:${s.total >= opp ? "var(--text)" : "var(--text2)"}">${usd(s.total)}</span></div>
+    <hr><div class="line" style="font-weight:600"><span>Total money</span><span class="num" style="color:${s.total >= opp ? "var(--text)" : "var(--text2)"}">${usd(s.total)}</span></div>
+    <div class="line small"><span class="muted">Money per vote received</span><span class="num">$${(s.total / s.votes).toFixed(2)}</span></div>
   </div>`;
-document.getElementById("pickGap").innerHTML = `<span class="muted">Campaigns only</span> ${gapHtml(D.spent - R.spent)} <span class="muted" style="margin-left:10px">With outside money</span> ${gapHtml(D.total - R.total)}`;
+document.getElementById("pickGap").innerHTML = `<span class="muted">Result</span> ${resultHtml}${outspentTag} <span class="muted" style="margin-left:10px">Campaigns only</span> ${gapHtml(D.spent - R.spent)} <span class="muted" style="margin-left:10px">With outside money</span> ${gapHtml(D.total - R.total)}`;
 document.getElementById("detail").innerHTML = sideHtml("Democrat", D, "Hinson", R.total) + sideHtml("Republican", R, "Turek", D.total);
 const others = CANDIDATES.filter((c) => !c.nominee).sort((a, b) => b.spent - a.spent);
 const allD = CANDIDATES.filter((c) => c.party === "D").reduce((s, c) => s + c.spent, 0);
 const allR = CANDIDATES.filter((c) => c.party === "R").reduce((s, c) => s + c.spent, 0);
 document.getElementById("others").innerHTML = `
   <div class="others small">
-    <p class="faint">Other candidates in this race (primary losers and the Libertarian nominee), campaign spending and last report date</p>
-    ${others.map((c) => `<div class="line"><span>${partyTag(c.party)} <span style="margin-left:6px">${esc(c.name)}</span>${c.party === "L" ? '<span class="tag">on the ballot</span>' : ""}</span><span class="num muted">${usd(c.spent)} spent <span class="faint">· through ${c.through}</span></span></div>`).join("")}
+    <p class="faint">Other candidates in this race (the Libertarian nominee and candidates who did not reach the general ballot), campaign spending and last report date</p>
+    ${others.map((c) => `<div class="line"><span>${partyTag(c.party)} <span style="margin-left:6px">${esc(c.name)}</span>${c.votes != null ? `<span class="tag">on the ballot · ${num(c.votes)} votes (${c.pct.toFixed(1)}%), lost by ${num(c.by)}</span>` : '<span class="tag">not on the general ballot</span>'}</span><span class="num muted">${usd(c.spent)} spent <span class="faint">· through ${c.through}</span></span></div>`).join("")}
     <hr>
     <div class="line"><span class="muted">All Democratic candidates, campaign spending</span><span class="num">${usd(allD)}</span></div>
     <div class="line"><span class="muted">All Republican candidates, campaign spending</span><span class="num">${usd(allR)}</span></div>

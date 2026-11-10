@@ -110,9 +110,25 @@
     .table-wrap td:nth-child(10) { grid-area: res; text-align: right; }
     .table-wrap td[colspan] { grid-column: 1 / -1; }
   }
+  .topnav { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--stroke); }
+  .topnav .in { max-width: 1180px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 4px; height: 44px; overflow-x: auto; white-space: nowrap; }
+  .topnav .brand { font-size: 12px; font-weight: 600; color: var(--text2); margin-right: 12px; }
+  .topnav a { color: var(--text2); text-decoration: none; font-size: 13px; padding: 4px 10px; border-radius: 999px; }
+  .topnav a:hover { color: var(--text); background: var(--fill); }
+  .topnav a[aria-current="page"] { color: var(--text); background: var(--fill); font-weight: 600; }
+  @media (max-width: 800px) { .topnav .in { padding: 0 16px; } .topnav .brand { display: none; } }
 </style>
 </head>
 <body>
+<nav class="topnav" aria-label="Iowa 2026 races">
+  <div class="in">
+    <span class="brand">Iowa 2026 campaign money</span>
+    <a href="IAUSSenate2026Spending.html">U.S. Senate</a>
+    <a href="IAUSHouse2026Spending.html">U.S. House</a>
+    <a href="IASenate2026Spending.html">Iowa Senate</a>
+    <a href="IAHouse2026Spending.html" aria-current="page">Iowa House</a>
+  </div>
+</nav>
 <main>
   <section>
     <h1>Iowa House 2026: campaign money and results by district, Republican vs Democrat</h1>
