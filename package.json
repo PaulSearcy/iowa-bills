@@ -10,6 +10,8 @@
     "fetch-votes:2025": "node tools/fetch-vote-details.js --input data/2025session.json --output 2025session-with-voters.json --js-output vote-data-2025.js",
     "fetch-votes:2026": "node tools/fetch-vote-details.js --input data/2026sessions.json --output data/2026session-with-voters.json --js-output vote-data-2026.js",
     "compact-vote-data": "node tools/compact-vote-data.js vote-data-2025.js vote-data-2026.js",
+    "build": "rm -rf _site && python3 -c \"import yaml; w = yaml.safe_load(open('.github/workflows/pages.yml')); print('\\n'.join(s['run'] for s in w['jobs']['build']['steps'] if 'run' in s))\" | bash -e",
+    "preview": "npm run build && python3 -m http.server 8000 --directory _site",
     "test": "echo \"No tests specified\""
   },
   "dependencies": {

@@ -26,6 +26,43 @@ jobs:
           cp index.html bill-list.html vote-table.html compare.html 404.html app.css _site/
           cp js/votes.js js/vote-data-2025.js js/vote-data-2026.js _site/js/
           touch _site/.nojekyll
+      - name: Assemble midterm pages
+        run: |
+          mkdir -p _site/midterm
+          shopt -s nullglob
+          cp midterm/*.html _site/midterm/
+          if [ ! -f midterm/index.html ]; then
+            {
+              cat <<'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Midterm — Iowa Legislature Floor Votes</title>
+              <link rel="stylesheet" href="../app.css">
+          </head>
+          <body>
+              <div class="container" style="max-width: 40rem;">
+                  <header class="page-header">
+                      <h1>Midterm</h1>
+                  </header>
+                  <ul>
+          EOF
+              for f in midterm/*.html; do
+                name=$(basename "$f")
+                title=$(sed -n 's:.*<title>\(.*\)</title>.*:\1:p' "$f" | head -n1)
+                echo "            <li><a href=\"$name\">${title:-$name}</a></li>"
+              done
+              cat <<'EOF'
+                  </ul>
+                  <p><a href="../index.html">Iowa Legislature floor votes</a></p>
+              </div>
+          </body>
+          </html>
+          EOF
+            } > _site/midterm/index.html
+          fi
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:

@@ -12,6 +12,7 @@ This is a civic record, not an official source. Roll calls still live on [legis.
 | --- | --- |
 | [Table](index.html) | Members across many votes |
 | [List](bill-list.html) | Bills with yea / nay / absent names |
+| [Midterm](midterm/) | Every HTML file in `midterm/`, served at `/midterm/<file>.html` |
 
 Open `index.html` in a browser, or serve the folder:
 

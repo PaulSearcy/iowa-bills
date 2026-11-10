@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iowa House 2026: Campaign Money by District</title>
+<style>
+  :root {
+    --text: #1d1d1f; --text2: #555a63; --text3: #8a8f98; --bg: #ffffff; --fill: #f4f5f7;
+    --stroke: #e3e5e8; --dem: #2E79B5; --rep: #C04848; --link: #2E79B5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --text: #e8e8ea; --text2: #a9adb5; --text3: #7b8089; --bg: #17181b; --fill: #212327; --stroke: #2e3136; --dem: #5b9bd5; --rep: #d9675f; --link: #70b0d8; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/20px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 64px; display: flex; flex-direction: column; gap: 28px; }
+  h1 { font-size: 24px; line-height: 30px; margin: 0 0 6px; font-weight: 600; }
+  h2 { font-size: 18px; line-height: 24px; margin: 0 0 6px; font-weight: 600; }
+  h3 { font-size: 15px; margin: 0 0 6px; font-weight: 600; }
+  p { margin: 0; }
+  .small { font-size: 12px; line-height: 16px; }
+  .muted { color: var(--text2); } .faint { color: var(--text3); }
+  .num { font-variant-numeric: tabular-nums; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr 1fr 2fr; gap: 16px; align-items: center; }
+  .stat .v { font-size: 22px; font-weight: 600; line-height: 28px; }
+  .stat .l { font-size: 12px; color: var(--text2); }
+  .callout { background: var(--fill); border-radius: 8px; padding: 10px 14px; }
+  .callout b { display: block; margin-bottom: 2px; }
+  .card { border: 1px solid var(--stroke); border-radius: 8px; }
+  .card-h { padding: 6px 14px; border-bottom: 1px solid var(--stroke); font-size: 12px; color: var(--text2); display: flex; justify-content: space-between; }
+  .card-b { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .line { display: flex; justify-content: space-between; gap: 12px; }
+  hr { border: 0; border-top: 1px solid var(--stroke); margin: 2px 0; width: 100%; }
+  select, input { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--stroke); border-radius: 6px; padding: 4px 8px; height: 28px; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .pill { border: 1px solid var(--stroke); background: transparent; color: var(--text); border-radius: 999px; padding: 3px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+  .pill.active { background: var(--fill); border-color: var(--text3); font-weight: 600; }
+  .spacer { flex: 1; }
+  .legend { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+  .table-wrap { border: 1px solid var(--stroke); border-radius: 8px; overflow: auto; max-height: 720px; }
+  table { border-collapse: collapse; width: 100%; }
+  th { position: sticky; top: 0; background: var(--bg); text-align: left; font-size: 12px; font-weight: 600; color: var(--text2); padding: 8px 10px; border-bottom: 1px solid var(--stroke); white-space: nowrap; }
+  td { padding: 6px 10px; border-bottom: 1px solid var(--stroke); white-space: nowrap; }
+  tbody tr:nth-child(even) td { background: var(--fill); }
+  .r { text-align: right; } .c { text-align: center; }
+  .hd { color: var(--link); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+  .none { color: var(--text3); }
+  .split { display: inline-flex; width: 140px; height: 10px; align-items: center; }
+  .split .half { width: 70px; display: flex; }
+  .split .half.left { justify-content: flex-end; }
+  .split .axis { width: 1px; height: 14px; background: var(--stroke); }
+  .bar-d { height: 10px; background: var(--dem); border-radius: 2px 0 0 2px; }
+  .bar-r { height: 10px; background: var(--rep); border-radius: 0 2px 2px 0; }
+  .gap-d { color: var(--dem); font-weight: 600; } .gap-r { color: var(--rep); font-weight: 600; }
+  .chart { display: grid; grid-template-columns: 210px 1fr; gap: 6px 12px; align-items: center; }
+  .chart .lab { font-size: 12px; color: var(--text2); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chart .bars { display: flex; flex-direction: column; gap: 2px; }
+  .chart .b { height: 9px; border-radius: 0 2px 2px 0; position: relative; }
+  .chart .b span { position: absolute; left: calc(100% + 6px); top: -4px; font-size: 11px; color: var(--text3); white-space: nowrap; }
+  .axisrow { display: grid; grid-template-columns: 210px 1fr; gap: 12px; }
+  .ticks { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); border-top: 1px solid var(--stroke); padding-top: 4px; }
+  @media (max-width: 800px) { .stats { grid-template-columns: 1fr 1fr; } .two { grid-template-columns: 1fr; } .chart, .axisrow { grid-template-columns: 130px 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <h1>Iowa House 2026: campaign money by district, Republican vs Democrat</h1>
+    <p class="small muted">Source: Iowa Ethics &amp; Campaign Disclosure Board via Iowa Data Hub (expenditures, contributions, independent expenditures, committee registry) and the Iowa SOS general-election candidate list. Activity from Nov 6, 2024 through reports filed Oct 2026 (covering through about Oct 14). General-election nominees only.</p>
+  </section>
+
+  <section class="stats" id="stats"></section>
+
+  <section>
+    <h2>Most expensive contested races</h2>
+    <p class="small muted" style="margin-bottom:12px">Total money per side (candidate committee spending + in-kind support + outside groups), top 15 contested districts by combined total.</p>
+    <div class="legend small muted" style="margin-bottom:10px"><span><i class="sw" style="background:var(--dem)"></i>Democratic side</span><span><i class="sw" style="background:var(--rep)"></i>Republican side</span></div>
+    <div class="chart" id="chart"></div>
+    <div class="axisrow" style="margin-top:6px"><div></div><div><div class="ticks" id="ticks"></div><div class="small faint" style="text-align:center;margin-top:2px">Total money (USD)</div></div></div>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span>District breakdown</span><span class="faint">Pick any district</span></div>
+    <div class="card-b">
+      <div class="controls"><select id="pick" style="min-width:320px"></select><span id="pickGap"></span></div>
+      <div class="two" id="detail"></div>
+      <p class="small faint" id="third"></p>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <h2>All 100 districts</h2>
+    <div class="controls">
+      <span id="pills" class="controls"></span>
+      <span class="spacer"></span>
+      <input id="q" type="search" placeholder="Search name or district" style="width:200px">
+      <select id="sort" style="width:210px">
+        <option value="hd">Sort: district number</option>
+        <option value="total">Sort: most total money</option>
+        <option value="rGap">Sort: biggest R advantage</option>
+        <option value="dGap">Sort: biggest D advantage</option>
+      </select>
+    </div>
+    <div class="legend small muted">
+      <span><i class="sw" style="background:var(--dem)"></i>Democratic total</span>
+      <span><i class="sw" style="background:var(--rep)"></i>Republican total</span>
+      <span class="faint">Click a district number to open its breakdown above.</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>HD</th><th>Democrat</th><th class="r">D total</th><th class="c">D vs R</th><th class="r">R total</th><th>Republican</th><th class="r">Gap</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h3>How the totals are built</h3>
+    <p class="small muted" style="margin-bottom:6px">Candidate committee spending is every expenditure the nominee's committee reported since Nov 6, 2024 (loan repayments excluded). In-kind is goods and services given to the campaign, mostly mail, staff and ads paid for by the state parties; the Republican Party of Iowa gave about $3.81M in-kind to House nominees vs. about $1.15M from the Iowa Democratic Party. Outside groups are independent expenditures by groups not registered in Iowa, counted for a candidate when they support that candidate or attack the opponent. Spending by Iowa-registered PACs that is not reported as an in-kind gift to a specific candidate is not attributed to a district.</p>
+    <p class="small faint">Kevin W. DuBay (R, HD 31) has no registered committee (one is only required after raising or spending more than $1,000), and Charlie Helmick (R, HD 97) has a committee that reported no spending, so both show $0. Totals stop around Oct 14; the final weeks of the campaign appear in later filings.</p>
+  </section>
+</main>
+
+<script>
+(() => {
+// [district, demName, demSpent, demInKind, proDemOutside, repName, repSpent, repInKind, proRepOutside]
+const RAW = [[1,"Shawn Olorundami",42534,68160,0,"Josh Steinhoff",1238,0,0],[2,"Jessica Lopez-Walker",2274,0,0,"Robert Henderson",47496,375,0],[3,null,0,0,0,"Robert Driesen",3862,0,0],[4,null,0,0,0,"Skyler Wheeler",53282,187,0],[5,"Stephanie Steiner",0,0,0,"Keith Glienke",8833,0,0],[6,null,0,0,0,"Megan Jones",172539,3244,0],[7,"Rachel Burns",32329,14030,0,"Wendy Larson",10811,48365,0],[8,"Kristofer Williams",9605,704,0,"Ann Meyer",162328,2409,0],[9,null,0,0,0,"Henry Stone",74634,0,0],[10,null,0,0,0,"John H Wills",111782,2550,0],[11,"Bill Owen",27010,3087,0,"Craig Williams",15781,44,0],[12,"Dustin Durbin",1415,0,0,"Steven Holt",83972,4391,0],[13,null,0,0,0,"Travis M. Sitzmann",30291,187,0],[14,null,0,0,0,"Jacob Bossman",84305,3517,0],[15,"Benjamin Schauer",19391,755,0,"Jason Sherer",38933,222,0],[16,"Jack Goodman",5621,0,0,"David A. Sieck",32338,0,0],[17,null,0,0,0,"Devon Wood",33181,30,8361],[18,"Tripp Narup",6666,0,0,"Thomas Jay Moore",12168,0,0],[19,"Benjamin Thomas Larson",3693,0,977,"Brent Siegrist",121219,43770,0],[20,"Eric Armstrong",35527,0,0,"Keith Jones",10094,54911,0],[21,"Spencer A Waugh",79979,8036,0,"Brooke Boden",49051,52942,21121],[22,"Rory Taylor",27095,20102,0,"Samantha Fett",41987,1539,0],[23,"Karen Varley",7182,480,0,"Ray Bubba Sorensen",47646,601,0],[24,"Sonya Hicks",6329,211,0,"Sam Wengryn",3739,13,0],[25,"Kolton Jones",1194,0,0,"Hans C. Wilz",124585,45329,0],[26,"Brett Mohler",17852,50,0,"Austin Harris",219650,5144,0],[27,"Kenan Judge",120644,836,0,null,0,0,0],[28,"Tom Walton",108407,137231,0,"David Young",342340,529402,0],[29,"Brian Meyer",218392,0,0,null,0,0,0],[30,"Megan L. Srinivas",123140,126,0,null,0,0,0],[31,"Mary Madison",14885,0,0,"Kevin W. DuBay",0,0,0],[32,"Mike Jones",12330,0,0,null,0,0,0],[33,"Ivette Muhammad",65070,7500,0,"Lynn Hammel",2374,0,0],[34,"Rob Johnson",14026,0,0,null,0,0,0],[35,"Sean Bagniewski",55135,0,0,null,0,0,0],[36,"Austin Baeth",55149,0,0,null,0,0,0],[37,null,0,0,0,"Jason Sandholdt",29340,953,0],[38,"Brad Magg",28326,21443,0,"Matthew Oleson",10103,99991,20433],[39,"Nate Boulton",58757,11108,0,"Troy Clark",4366,6894,0],[40,"Heather Sievers",73682,76988,59528,"Bill Gustoff",173238,316378,35180],[41,"Molly Buck",86880,135665,5292,"Ryan Weldon",56710,167401,66269],[42,"Amy Tagliareni",47203,134823,0,"Heather Stephenson",31403,7356,27372],[43,"Jill Alesch",116723,139849,1551,"Nicole Hasso",28519,17578,0],[44,"Larry McBurney",12825,0,0,null,0,0,0],[45,"Kendra Haug",15621,3415,0,"Austin Stubbs",29686,0,47685],[46,"Mandy Newton Rosenow",70668,35979,0,"Dan Gehlbach",47571,438359,29902],[47,"Chris New",9327,0,0,"Carter F. Nordman",354774,2562,50726],[48,"Benjamin Olsen",10406,0,0,"Chad Behn",46766,54375,17229],[49,"Beth Wessel-Kroeschell",27843,0,0,null,0,0,0],[50,"Ross Wilburn",21112,0,0,null,0,0,0],[51,"Teresa Perin",10977,905,0,"Brett Barker",110365,0,0],[52,"Mike Tupper",84899,133836,1661,"David Blom",17136,485636,1000],[53,null,0,0,0,"Dean Fisher",30268,51475,0],[54,"Leila Ann Staton",21898,0,0,"Joshua Meggers",54615,1094,0],[55,"Cynthia Oppedal Paschen",8491,601,1000,"Beau Klaver",52698,500,0],[56,"Kyle Kruse",6046,0,0,"Mark I. Thompson",5855,0,0],[57,"Shawn Ellerbroek",38634,16335,0,"Pat Grassley",281403,11448,0],[58,"India May",27613,3924,870,"Charley Thomson",60042,14,0],[59,"Jacob Welper",63876,82793,2081,"Christian Hermanson",88195,347148,1200],[60,"Alexander Schmidt",4217,234,0,"Dani Ollenburg",23566,0,0],[61,"Vincent Collis",4489,0,0,null,0,0,0],[62,"Jerome Amos Jr",4029,0,0,null,0,0,0],[63,"Jeff Thurlow",20144,2000,0,"Michael R. Bergan",29120,13399,0],[64,"Brian Bruening",2603,0,1000,"Jason Gearhart",25130,13,0],[65,"Carolyn Wiezorek",13325,1915,995,"Shannon Lundgren",76545,4588,0],[66,"Matt English",11260,519,1000,"Steven Bradley",40861,223,0],[67,"Michael Coonrad",1647,60,0,"Craig Johnson",55710,0,0],[68,"Scott Bodley",2421,0,0,"Chad Ingels",67674,210,2016],[69,"Randy Meier",12296,26107,0,"Tom Determann",49544,112461,0],[70,"George Pickup",39600,4021,0,"Norlin Mommsen",56500,41,0],[71,"Sam Wooden",15559,402,0,null,0,0,0],[72,"Matt Robinson",50385,47870,3108,"Jennifer Smith",23595,197317,34163],[73,"Elizabeth Wilson",40005,0,0,null,0,0,0],[74,"Eric Gjerde",17616,300,0,null,0,0,0],[75,"Drew Stensland",47566,0,0,null,0,0,0],[76,"Calvin Horn",6941,0,0,"Matt Reisetter",11412,54155,0],[77,"Jeff Cooling",31603,0,0,null,0,0,0],[78,"Angel Ramirez",20251,8408,0,null,0,0,0],[79,"Tracy Ehlert",10914,3962,0,"Barclay Woerner",3556,0,0],[80,"Aime J Wichtendahl",36130,271,0,null,0,0,0],[81,"Daniel Gosa",120613,29169,0,"Dillon Fillion",8327,1902,0],[82,"James Behrmann",1260,79,0,"Bobby Kaufmann",279347,1767,0],[83,"Mike Bergman",9931,2938,0,"Cindy Golding",67885,48023,0],[84,"Polly Denison",6169,0,1000,"Thomas Gerhold",13688,0,0],[85,"Amy Nielsen",5620,0,0,null,0,0,0],[86,"Dave Jacoby",50025,0,0,null,0,0,0],[87,"Thomas R. O'Donnell",54151,14962,0,"Jeff Shipley",41910,42287,0],[88,null,0,0,0,"Helena Hayes",25016,1516,26147],[89,"Elinor A. Levin",37711,0,0,null,0,0,0],[90,"Adam Zabner",78767,500,0,null,0,0,0],[91,"Mark Divitt",1293,3298,0,"Judd Lawler",61342,57702,23191],[92,"Brittany Erickson",2851,345,0,"Heather Hora",68046,3638,20618],[93,"Keith Soko",1998,0,0,"Gary M. Mohr",321901,61796,0],[94,"Karen Roebuck",4728,2729,0,"Mike Vondran",101736,153356,0],[95,"Carrie Trevino",4805,73,0,"Taylor Collins",201905,5452,0],[96,"Nick Salazar",10254,2250,0,"Mark Cisneros",28466,100,16891],[97,"Adam Peters",44273,280,0,"Charlie Helmick",0,0,0],[98,"Andrew Fitzgerald",9352,7542,0,"Nathan Ramker",18091,10779,0],[99,"Jennifer Kirkman",47465,59659,0,"Matthew Rinker",22134,114017,0],[100,"Matthew Mohrfeld",31208,5267,0,"Blaine Watkins",31374,214130,103302]];
+const THIRD_PARTY = { 4: ["Garth Van Donselaar"], 15: ["Blake Johnson", "Marilyn J Mentzer"], 61: ["Lucas Hewitt"], 89: ["Daniel Arch"] };
+
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const usd = (n) => "$" + Math.round(n).toLocaleString("en-US");
+const usdShort = (n) => n >= 1e6 ? `$${(n / 1e6).toFixed(2)}M` : n >= 1e3 ? `$${Math.round(n / 1e3)}K` : usd(n);
+const lastName = (s) => s.replace(/\b(Jr|Sr|II|III)\b\.?/g, "").trim().split(/\s+/).pop();
+const side = (name, spent, inKind, outside) => name ? { name, spent, inKind, outside, total: spent + inKind + outside } : null;
+
+const DISTRICTS = RAW.map(([hd, dn, ds, dk, dio, rn, rs, rk, rio]) => {
+  const D = side(dn, ds, dk, dio), R = side(rn, rs, rk, rio);
+  const dTotal = D?.total ?? 0, rTotal = R?.total ?? 0;
+  return { hd, D, R, dTotal, rTotal, gap: dTotal - rTotal, kind: D && R ? "contested" : D ? "dOnly" : "rOnly" };
+});
+const contested = DISTRICTS.filter((d) => d.kind === "contested");
+const max = Math.max(...DISTRICTS.map((d) => Math.max(d.dTotal, d.rTotal)));
+const gapHtml = (d) => Math.round(d.gap) === 0 ? '<span class="faint">even</span>'
+  : `<span class="num ${d.gap > 0 ? "gap-d" : "gap-r"}">${d.gap > 0 ? "D" : "R"} +${usd(Math.abs(d.gap))}</span>`;
+
+// Stats
+const cD = contested.reduce((s, d) => s + d.dTotal, 0), cR = contested.reduce((s, d) => s + d.rTotal, 0);
+document.getElementById("stats").innerHTML = `
+  <div class="stat"><div class="v" style="color:var(--rep)">${usdShort(cR)}</div><div class="l">Pro-Republican money, ${contested.length} contested races</div></div>
+  <div class="stat"><div class="v" style="color:var(--dem)">${usdShort(cD)}</div><div class="l">Pro-Democratic money, ${contested.length} contested races</div></div>
+  <div class="stat"><div class="v">${contested.filter((d) => d.gap > 0).length} of ${contested.length}</div><div class="l">Contested races where Democrats had more</div></div>
+  <div class="callout"><b>Totals stop around Oct 14</b><span class="muted">The final three weeks of the campaign appear in later filings, so every number here will go up, especially in close races.</span></div>`;
+
+// Chart
+const topRaces = [...contested].sort((a, b) => b.dTotal + b.rTotal - (a.dTotal + a.rTotal)).slice(0, 15);
+const cmax = Math.ceil(Math.max(...topRaces.map((d) => Math.max(d.dTotal, d.rTotal))) / 100000) * 100000;
+document.getElementById("chart").innerHTML = topRaces.map((d) => `
+  <div class="lab" title="HD ${d.hd}: ${esc(d.D.name)} / ${esc(d.R.name)}">HD ${d.hd}: ${esc(lastName(d.D.name))} / ${esc(lastName(d.R.name))}</div>
+  <div class="bars">
+    <div class="b" style="width:${(d.dTotal / cmax) * 85}%;background:var(--dem)"><span>${usd(d.dTotal)}</span></div>
+    <div class="b" style="width:${(d.rTotal / cmax) * 85}%;background:var(--rep)"><span>${usd(d.rTotal)}</span></div>
+  </div>`).join("");
+const steps = 4;
+document.getElementById("ticks").innerHTML = Array.from({ length: steps + 1 }, (_, i) => `<span>${usdShort((cmax * i) / steps)}</span>`).join("");
+// Bars are scaled to 85% of the row so their value labels fit; the axis matches that width.
+document.getElementById("ticks").style.width = "85%";
+
+// Breakdown
+const pick = document.getElementById("pick");
+pick.innerHTML = DISTRICTS.map((d) => `<option value="${d.hd}">HD ${d.hd}: ${d.D ? esc(lastName(d.D.name)) + " (D)" : "no D"} vs ${d.R ? esc(lastName(d.R.name)) + " (R)" : "no R"}</option>`).join("");
+const sideHtml = (label, s, opp) => !s ? `<div><p class="small faint">${label}</p><p class="muted">No candidate on the ballot</p></div>` : `
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <p class="small faint">${label}</p><p style="font-weight:600">${esc(s.name)}</p>
+    <div class="line small"><span class="muted">Candidate committee spending</span><span class="num">${usd(s.spent)}</span></div>
+    <div class="line small"><span class="muted">In-kind received (party/PAC-paid)</span><span class="num">${usd(s.inKind)}</span></div>
+    <div class="line small"><span class="muted">Outside groups (support + attacks on opponent)</span><span class="num">${usd(s.outside)}</span></div>
+    <hr><div class="line" style="font-weight:600"><span>Total</span><span class="num" style="color:${s.total >= opp ? "var(--text)" : "var(--text2)"}">${usd(s.total)}</span></div>
+  </div>`;
+function select(hd) {
+  const d = DISTRICTS.find((x) => x.hd === Number(hd));
+  pick.value = String(d.hd);
+  document.getElementById("pickGap").innerHTML = gapHtml(d);
+  document.getElementById("detail").innerHTML = sideHtml("Democrat", d.D, d.rTotal) + sideHtml("Republican", d.R, d.dTotal);
+  document.getElementById("third").textContent = THIRD_PARTY[d.hd] ? `Also on the ballot (no party): ${THIRD_PARTY[d.hd].join(", ")}.` : "";
+}
+pick.addEventListener("change", () => select(pick.value));
+
+// Table
+const state = { filter: "contested", sort: "hd", q: "" };
+const FILTERS = [["contested", "Contested"], ["dOnly", "Democrat unopposed"], ["rOnly", "Republican unopposed"], ["all", "All"]];
+const count = (k) => k === "all" ? DISTRICTS.length : DISTRICTS.filter((d) => d.kind === k).length;
+const pills = document.getElementById("pills");
+function renderPills() {
+  pills.innerHTML = FILTERS.map(([k, l]) => `<button class="pill${state.filter === k ? " active" : ""}" data-k="${k}">${l} (${count(k)})</button>`).join("");
+}
+pills.addEventListener("click", (e) => { const k = e.target.dataset?.k; if (k) { state.filter = k; renderPills(); renderRows(); } });
+const SORTS = {
+  hd: (a, b) => a.hd - b.hd,
+  total: (a, b) => b.dTotal + b.rTotal - (a.dTotal + a.rTotal),
+  rGap: (a, b) => a.gap - b.gap,
+  dGap: (a, b) => b.gap - a.gap,
+};
+function renderRows() {
+  const q = state.q.trim().toLowerCase();
+  let list = DISTRICTS.filter((d) => state.filter === "all" || d.kind === state.filter);
+  if (q) list = list.filter((d) => `${d.hd} ${d.D?.name ?? ""} ${d.R?.name ?? ""}`.toLowerCase().includes(q));
+  list.sort(SORTS[state.sort]);
+  document.getElementById("rows").innerHTML = list.map((d) => `<tr>
+    <td><span class="hd num" data-hd="${d.hd}">${d.hd}</span></td>
+    <td>${d.D ? esc(d.D.name) : '<span class="none">none</span>'}</td>
+    <td class="r num">${d.D ? usd(d.dTotal) : ""}</td>
+    <td class="c"><span class="split"><span class="half left"><span class="bar-d" style="width:${(d.dTotal / max) * 70}px"></span></span><span class="axis"></span><span class="half"><span class="bar-r" style="width:${(d.rTotal / max) * 70}px"></span></span></span></td>
+    <td class="r num">${d.R ? usd(d.rTotal) : ""}</td>
+    <td>${d.R ? esc(d.R.name) : '<span class="none">none</span>'}</td>
+    <td class="r">${gapHtml(d)}</td></tr>`).join("") || '<tr><td colspan="7" class="faint">No matching districts.</td></tr>';
+}
+document.getElementById("rows").addEventListener("click", (e) => {
+  const hd = e.target.dataset?.hd;
+  if (hd) { select(hd); pick.scrollIntoView({ behavior: "smooth", block: "center" }); }
+});
+document.getElementById("q").addEventListener("input", (e) => { state.q = e.target.value; renderRows(); });
+document.getElementById("sort").addEventListener("change", (e) => { state.sort = e.target.value; renderRows(); });
+
+renderPills(); renderRows(); select(19);
+})();
+</script>
+</body>
+</html>
