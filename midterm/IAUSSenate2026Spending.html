@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iowa U.S. Senate 2026: Turek vs Hinson Campaign Money</title>
+<style>
+  :root {
+    --text: #1d1d1f; --text2: #555a63; --text3: #8a8f98; --bg: #ffffff; --fill: #f4f5f7;
+    --stroke: #e3e5e8; --dem: #2E79B5; --rep: #C04848; --ind: #8a8f98; --link: #2E79B5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --text: #e8e8ea; --text2: #a9adb5; --text3: #7b8089; --bg: #17181b; --fill: #212327; --stroke: #2e3136; --dem: #5b9bd5; --rep: #d9675f; --ind: #7b8089; --link: #70b0d8; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/20px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 64px; display: flex; flex-direction: column; gap: 28px; }
+  h1 { font-size: 24px; line-height: 30px; margin: 0 0 6px; font-weight: 600; }
+  h2 { font-size: 18px; line-height: 24px; margin: 0 0 6px; font-weight: 600; }
+  h3 { font-size: 15px; margin: 0 0 6px; font-weight: 600; }
+  p { margin: 0; }
+  .small { font-size: 12px; line-height: 16px; }
+  .muted { color: var(--text2); } .faint { color: var(--text3); }
+  .num { font-variant-numeric: tabular-nums; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr 1fr 2fr; gap: 16px; align-items: center; }
+  .stat .v { font-size: 22px; font-weight: 600; line-height: 28px; }
+  .stat .l { font-size: 12px; color: var(--text2); }
+  .callout { background: var(--fill); border-radius: 8px; padding: 10px 14px; }
+  .callout b { display: block; margin-bottom: 2px; }
+  .card { border: 1px solid var(--stroke); border-radius: 8px; }
+  .card-h { padding: 6px 14px; border-bottom: 1px solid var(--stroke); font-size: 12px; color: var(--text2); display: flex; justify-content: space-between; }
+  .card-b { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .line { display: flex; justify-content: space-between; gap: 12px; }
+  .line.sub { padding-left: 12px; }
+  hr { border: 0; border-top: 1px solid var(--stroke); margin: 2px 0; width: 100%; }
+  select, input { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--stroke); border-radius: 6px; padding: 4px 8px; height: 28px; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .pill { border: 1px solid var(--stroke); background: transparent; color: var(--text); border-radius: 999px; padding: 3px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+  .pill.active { background: var(--fill); border-color: var(--text3); font-weight: 600; }
+  .spacer { flex: 1; }
+  .legend { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+  .sw.out { opacity: 0.4; }
+  .table-wrap { border: 1px solid var(--stroke); border-radius: 8px; overflow: auto; max-height: 720px; }
+  table { border-collapse: collapse; width: 100%; }
+  th { position: sticky; top: 0; background: var(--bg); text-align: left; font-size: 12px; font-weight: 600; color: var(--text2); padding: 8px 10px; border-bottom: 1px solid var(--stroke); white-space: nowrap; }
+  td { padding: 6px 10px; border-bottom: 1px solid var(--stroke); white-space: nowrap; }
+  tbody tr:nth-child(even) td { background: var(--fill); }
+  .r { text-align: right; } .c { text-align: center; }
+  .tag { font-size: 11px; color: var(--text3); margin-left: 6px; }
+  .party { display: inline-block; min-width: 28px; text-align: center; font-size: 11px; font-weight: 600; border-radius: 4px; padding: 0 4px; color: #fff; }
+  .gap-d { color: var(--dem); font-weight: 600; } .gap-r { color: var(--rep); font-weight: 600; }
+  .chart { display: grid; grid-template-columns: 260px 1fr; gap: 10px 12px; align-items: center; }
+  .chart .lab { font-size: 12px; color: var(--text2); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chart .lab b { color: var(--text); font-weight: 600; }
+  .chart .b { height: 18px; display: flex; position: relative; }
+  .chart.thin .b { height: 10px; }
+  .chart .b i { display: block; height: 100%; }
+  .chart .b i.out { opacity: 0.4; }
+  .chart .b i:last-of-type { border-radius: 0 2px 2px 0; }
+  .chart .b span { position: absolute; left: calc(100% + 6px); top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--text3); white-space: nowrap; }
+  .axisrow { display: grid; grid-template-columns: 260px 1fr; gap: 12px; }
+  .ticks { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); border-top: 1px solid var(--stroke); padding-top: 4px; }
+  .others { display: flex; flex-direction: column; gap: 4px; }
+  @media (max-width: 800px) { .stats { grid-template-columns: 1fr 1fr; } .two { grid-template-columns: 1fr; } .chart, .axisrow { grid-template-columns: 140px 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <h1>Iowa U.S. Senate 2026: campaign money, Josh Turek vs Ashley Hinson</h1>
+    <p class="small muted">Source: FEC OpenFEC API (elections summary, candidate totals, and Schedule E independent expenditures by candidate), 2026 cycle, pulled Nov 9, 2026. Candidate reports run through the pre-general filings (covering through Oct 14). Open seat (Joni Ernst did not seek re-election). Party coordinated spending is not included. <a href="IAUSHouse2026Spending.html" style="color:var(--link)">See the U.S. House page</a>, <a href="IAHouse2026Spending.html" style="color:var(--link)">the Iowa House page</a>, or <a href="IASenate2026Spending.html" style="color:var(--link)">the Iowa Senate page</a>.</p>
+  </section>
+
+  <section class="stats" id="stats"></section>
+
+  <section>
+    <div class="controls" style="margin-bottom:6px"><h2 style="margin:0">Money per side</h2><span class="spacer"></span><span id="modePills" class="controls"></span></div>
+    <p class="small muted" style="margin-bottom:12px" id="chartNote"></p>
+    <div class="legend small muted" style="margin-bottom:10px" id="chartLegend"></div>
+    <div class="chart" id="chart"></div>
+    <div class="axisrow" style="margin-top:6px"><div></div><div><div class="ticks" id="ticks"></div><div class="small faint" style="text-align:center;margin-top:2px">Total money (USD)</div></div></div>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><span>Side-by-side breakdown</span><span id="pickGap"></span></div>
+    <div class="card-b">
+      <div class="two" id="detail"></div>
+      <div id="others"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Biggest outside spenders</h2>
+    <p class="small muted" style="margin-bottom:12px">Independent expenditures per group, split by which nominee the money helped. Top 12 groups by total spent in the race.</p>
+    <div class="legend small muted" style="margin-bottom:10px">
+      <span><i class="sw" style="background:var(--dem)"></i>Helped Turek (support Turek or attack Hinson)</span>
+      <span><i class="sw" style="background:var(--rep)"></i>Helped Hinson (support Hinson or attack Turek)</span>
+    </div>
+    <div class="chart thin" id="groupChart"></div>
+    <div class="axisrow" style="margin-top:6px"><div></div><div><div class="ticks" id="groupTicks"></div><div class="small faint" style="text-align:center;margin-top:2px">Independent expenditures (USD)</div></div></div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <h2>Every outside group</h2>
+    <div class="controls">
+      <span id="pills" class="controls"></span>
+      <span class="spacer"></span>
+      <input id="q" type="search" placeholder="Search group" style="width:200px">
+      <select id="sort" style="width:210px">
+        <option value="total">Sort: most spent</option>
+        <option value="turek">Sort: most for Turek</option>
+        <option value="hinson">Sort: most for Hinson</option>
+        <option value="name">Sort: name</option>
+      </select>
+    </div>
+    <div class="legend small muted"><span class="faint">"Support" is ads for a nominee; "attack" is ads against the opponent. No group spent to help both nominees.</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Group</th><th class="r">Support Turek</th><th class="r">Attack Hinson</th><th class="r">Support Hinson</th><th class="r">Attack Turek</th><th class="r">Net</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h3>How the totals are built</h3>
+    <p class="small muted" style="margin-bottom:6px">Candidate spending is total disbursements by the nominee's principal campaign committee for the 2025–2026 cycle, primary and general combined. Hinson's Senate committee is her former U.S. House committee, so only activity since Jan 1, 2025 is counted; Turek's committee began reporting Jul 1, 2025. Raised includes transfers from joint fundraising committees, which FEC lists separately. Outside money is independent expenditures reported on FEC Schedule E: spending that supports a nominee or opposes their opponent counts for that nominee's side. Coordinated spending by the national and state parties is not included, nor is spending by groups that is not reported as an independent expenditure (such as issue ads).</p>
+    <p class="small faint">Outside spending covers the whole cycle, so some of it was spent during the primaries. Not counted for either side: $232,500 by Iowa Action supporting Zach Wahls in the Democratic primary, and $15,476 by Indivisible Action opposing Joni Ernst before she left the race. Candidate totals stop at the pre-general reports covering through Oct 14; the last three weeks appear in the post-general reports, due Dec 3, 2026. Independent expenditures are reported within 24–48 hours, so those run closer to Election Day.</p>
+  </section>
+</main>
+
+<script>
+(() => {
+// [name, party, raised, spent, cashOnHand, through, nominee, transfersIn]
+const CANDIDATES = [
+  ["Josh Turek", "D", 24290521, 21217670, 3072851, "2026-10-14", true, 1562740],
+  ["Ashley Hinson", "R", 14147973, 13903059, 2172989, "2026-10-14", true, 3907935],
+  ["Nathan Sage", "D", 1433544, 1433535, 9, "2026-09-30"],
+  ["Jim Carlin", "R", 494420, 489154, 5266, "2026-06-30"],
+  ["Jackie Norris", "D", 363563, 363563, 0, "2026-03-20"],
+  ["J.D. Scholten", "D", 213415, 205271, 8144, "2025-12-31"],
+  ["Thomas Laehn", "L", 61146, 66668, 9035, "2026-10-14"],
+].map(([name, party, raised, spent, cash, through, nominee = false, transfers = 0]) => ({ name, party, raised, spent, cash, through, nominee, transfers }));
+
+// [group, supportTurek, opposeHinson, supportHinson, opposeTurek]
+const GROUPS = [
+  ["VoteVets", 9756436, 6475183, 0, 0],
+  ["Win It Back PAC", 0, 0, 0, 3789309],
+  ["Americans for Prosperity Action", 0, 0, 3449905, 201867],
+  ["Fight On Iowa", 0, 0, 2808775, 3001341],
+  ["AB PAC", 0, 2053497, 0, 0],
+  ["WinSenate", 0, 1786417, 0, 0],
+  ["Lower Costs Now", 620975, 745165, 0, 0],
+  ["SLF PAC", 0, 0, 643424, 11166],
+  ["High Plains PAC", 0, 0, 0, 257500],
+  ["ClearPath Action Fund", 0, 0, 215921, 0],
+  ["Progressive Turnout Project", 43722, 0, 0, 0],
+  ["Democratic Messaging Project", 27913, 0, 0, 0],
+  ["Thomas Paine Society", 19031, 0, 0, 0],
+  ["Democrats Fight Back PAC", 17199, 0, 0, 0],
+  ["Americans for Constitutional Liberty", 0, 0, 0, 13475],
+  ["Mission Iowa", 0, 0, 10677, 0],
+  ["Field Team 6", 5833, 0, 0, 0],
+  ["Blue Shift PAC", 4596, 0, 0, 0],
+  ["Majority Blue PAC", 3678, 0, 0, 0],
+  ["Blue Majority Makers PAC", 3023, 0, 0, 0],
+  ["Blue Democracy Network", 2806, 0, 0, 0],
+  ["Activate America", 1683, 0, 0, 0],
+  ["FF PAC", 1300, 0, 0, 0],
+  ["Democratic Future PAC", 1208, 0, 0, 0],
+  ["Neighbor Voices PAC", 140, 921, 0, 0],
+  ["GiveGreen United Action", 335, 0, 0, 0],
+  ["Building Together", 0, 132, 0, 0],
+  ["MomsRising PAC", 85, 0, 0, 0],
+].map(([name, sT, oH, sH, oT]) => ({ name, sT, oH, sH, oT, turek: sT + oH, hinson: sH + oT, total: sT + oH + sH + oT }));
+
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const usd = (n) => (n < 0 ? "-$" : "$") + Math.abs(Math.round(n)).toLocaleString("en-US");
+const usdShort = (n) => n >= 1e6 ? `$${(n / 1e6).toFixed(n % 1e6 === 0 ? 0 : 2)}M` : n >= 1e3 ? `$${Math.round(n / 1e3)}K` : usd(n);
+const PARTY_COLOR = { D: "var(--dem)", R: "var(--rep)", L: "var(--ind)" };
+const partyTag = (p) => `<span class="party" style="background:${PARTY_COLOR[p]}">${p}</span>`;
+const gapHtml = (g, [dLabel, rLabel] = ["Turek", "Hinson"]) => Math.round(g) === 0 ? '<span class="faint">even</span>'
+  : `<span class="num ${g > 0 ? "gap-d" : "gap-r"}">${g > 0 ? dLabel : rLabel} +${usd(Math.abs(g))}</span>`;
+const sum = (k) => GROUPS.reduce((s, g) => s + g[k], 0);
+
+const turekC = CANDIDATES.find((c) => c.name === "Josh Turek");
+const hinsonC = CANDIDATES.find((c) => c.name === "Ashley Hinson");
+const SIDES = {
+  D: { ...turekC, support: sum("sT"), attack: sum("oH") },
+  R: { ...hinsonC, support: sum("sH"), attack: sum("oT") },
+};
+for (const s of Object.values(SIDES)) { s.outside = s.support + s.attack; s.total = s.spent + s.outside; }
+const { D, R } = SIDES;
+
+// Stats
+document.getElementById("stats").innerHTML = `
+  <div class="stat"><div class="v" style="color:var(--rep)">${usdShort(R.total)}</div><div class="l">Pro-Hinson money (campaign + outside groups)</div></div>
+  <div class="stat"><div class="v" style="color:var(--dem)">${usdShort(D.total)}</div><div class="l">Pro-Turek money (campaign + outside groups)</div></div>
+  <div class="stat"><div class="v">${usdShort(D.total + R.total)}</div><div class="l">Combined, both nominees and their outside allies</div></div>
+  <div class="callout"><b>Campaign totals stop around Oct 14</b><span class="muted">The final three weeks of candidate spending appear in the post-general reports due Dec 3, so these numbers will go up.</span></div>`;
+
+// Main chart
+const MODES = [["total", "Campaign + outside"], ["cand", "Campaigns only"]];
+const chartState = { mode: "total" };
+const modePills = document.getElementById("modePills");
+function renderChart() {
+  const withOutside = chartState.mode === "total";
+  modePills.innerHTML = MODES.map(([k, l]) => `<button class="pill${chartState.mode === k ? " active" : ""}" data-k="${k}">${l}</button>`).join("");
+  document.getElementById("chartNote").textContent = withOutside
+    ? "Nominee campaign spending plus independent expenditures by outside groups (support for the nominee + attacks on the opponent)."
+    : "Total disbursements by each nominee's own campaign committee, primary and general combined.";
+  document.getElementById("chartLegend").innerHTML = `
+    <span><i class="sw" style="background:var(--dem)"></i>Turek campaign</span>
+    <span><i class="sw" style="background:var(--rep)"></i>Hinson campaign</span>` + (withOutside ? `
+    <span><i class="sw out" style="background:var(--dem)"></i>Pro-Turek outside groups</span>
+    <span><i class="sw out" style="background:var(--rep)"></i>Pro-Hinson outside groups</span>` : "");
+  const val = (s) => withOutside ? s.total : s.spent;
+  const step = 10e6;
+  const cmax = Math.ceil(Math.max(val(D), val(R)) / step) * step;
+  const bar = (s, color) => `<div class="b" style="width:${(val(s) / cmax) * 85}%">
+      <i style="width:${(s.spent / val(s)) * 100}%;background:${color}"></i>${withOutside && s.outside ? `<i class="out" style="width:${(s.outside / val(s)) * 100}%;background:${color}"></i>` : ""}
+      <span>${usd(val(s))}</span></div>`;
+  document.getElementById("chart").innerHTML = `
+    <div class="lab"><b>Josh Turek</b> (D)</div>${bar(D, "var(--dem)")}
+    <div class="lab"><b>Ashley Hinson</b> (R)</div>${bar(R, "var(--rep)")}`;
+  const steps = cmax / step;
+  document.getElementById("ticks").innerHTML = Array.from({ length: steps + 1 }, (_, i) => `<span>${usdShort(step * i)}</span>`).join("");
+  // Bars are scaled to 85% of the row so their value labels fit; the axis matches that width.
+  document.getElementById("ticks").style.width = "85%";
+}
+modePills.addEventListener("click", (e) => { const k = e.target.dataset?.k; if (k) { chartState.mode = k; renderChart(); } });
+
+// Breakdown
+const sideHtml = (label, s, oppName, opp) => `
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <p class="small faint">${label}</p><p style="font-weight:600">${esc(s.name)}<span class="tag">open seat</span></p>
+    <div class="line small"><span class="muted">Raised</span><span class="num">${usd(s.raised)}</span></div>
+    <div class="line small sub"><span class="faint">of which, transfers from joint fundraising committees</span><span class="num faint">${usd(s.transfers)}</span></div>
+    <div class="line small"><span class="muted">Cash on hand (Oct 14)</span><span class="num">${usd(s.cash)}</span></div>
+    <hr>
+    <div class="line small"><span class="muted">Candidate committee spending</span><span class="num">${usd(s.spent)}</span></div>
+    <div class="line small"><span class="muted">Outside groups supporting ${esc(s.name.split(" ").pop())}</span><span class="num">${usd(s.support)}</span></div>
+    <div class="line small"><span class="muted">Outside groups attacking ${esc(oppName)}</span><span class="num">${usd(s.attack)}</span></div>
+    <hr><div class="line" style="font-weight:600"><span>Total</span><span class="num" style="color:${s.total >= opp ? "var(--text)" : "var(--text2)"}">${usd(s.total)}</span></div>
+  </div>`;
+document.getElementById("pickGap").innerHTML = `<span class="muted">Campaigns only</span> ${gapHtml(D.spent - R.spent)} <span class="muted" style="margin-left:10px">With outside money</span> ${gapHtml(D.total - R.total)}`;
+document.getElementById("detail").innerHTML = sideHtml("Democrat", D, "Hinson", R.total) + sideHtml("Republican", R, "Turek", D.total);
+const others = CANDIDATES.filter((c) => !c.nominee).sort((a, b) => b.spent - a.spent);
+const allD = CANDIDATES.filter((c) => c.party === "D").reduce((s, c) => s + c.spent, 0);
+const allR = CANDIDATES.filter((c) => c.party === "R").reduce((s, c) => s + c.spent, 0);
+document.getElementById("others").innerHTML = `
+  <div class="others small">
+    <p class="faint">Other candidates in this race (primary losers and the Libertarian nominee), campaign spending and last report date</p>
+    ${others.map((c) => `<div class="line"><span>${partyTag(c.party)} <span style="margin-left:6px">${esc(c.name)}</span>${c.party === "L" ? '<span class="tag">on the ballot</span>' : ""}</span><span class="num muted">${usd(c.spent)} spent <span class="faint">· through ${c.through}</span></span></div>`).join("")}
+    <hr>
+    <div class="line"><span class="muted">All Democratic candidates, campaign spending</span><span class="num">${usd(allD)}</span></div>
+    <div class="line"><span class="muted">All Republican candidates, campaign spending</span><span class="num">${usd(allR)}</span></div>
+    <div class="line"><span class="muted">Gap including primary losers</span>${gapHtml(allD - allR, ["D", "R"])}</div>
+  </div>`;
+
+// Outside group chart
+const topGroups = [...GROUPS].sort((a, b) => b.total - a.total).slice(0, 12);
+const gstep = 2e6;
+const gmax = Math.ceil(Math.max(...topGroups.map((g) => g.total)) / gstep) * gstep;
+const gbar = (v, color) => `<div class="b" style="width:${(v / gmax) * 85}%"><i style="width:100%;background:${color}"></i>${v ? `<span>${usd(v)}</span>` : ""}</div>`;
+document.getElementById("groupChart").innerHTML = topGroups.map((g) => `
+  <div class="lab" title="${esc(g.name)}">${esc(g.name)}</div>
+  <div style="display:flex;flex-direction:column;gap:2px">${g.turek ? gbar(g.turek, "var(--dem)") : ""}${g.hinson ? gbar(g.hinson, "var(--rep)") : ""}</div>`).join("");
+document.getElementById("groupTicks").innerHTML = Array.from({ length: gmax / gstep + 1 }, (_, i) => `<span>${usdShort(gstep * i)}</span>`).join("");
+document.getElementById("groupTicks").style.width = "85%";
+
+// Table
+const state = { filter: "all", sort: "total", q: "" };
+const FILTERS = [["all", "All"], ["turek", "Helped Turek"], ["hinson", "Helped Hinson"]];
+const matches = (g, k) => k === "all" || g[k] > 0;
+const pills = document.getElementById("pills");
+function renderPills() {
+  pills.innerHTML = FILTERS.map(([k, l]) => `<button class="pill${state.filter === k ? " active" : ""}" data-k="${k}">${l} (${GROUPS.filter((g) => matches(g, k)).length})</button>`).join("");
+}
+pills.addEventListener("click", (e) => { const k = e.target.dataset?.k; if (k) { state.filter = k; renderPills(); renderRows(); } });
+const SORTS = {
+  total: (a, b) => b.total - a.total,
+  turek: (a, b) => b.turek - a.turek,
+  hinson: (a, b) => b.hinson - a.hinson,
+  name: (a, b) => a.name.localeCompare(b.name),
+};
+const cell = (v) => `<td class="r num">${v ? usd(v) : '<span class="faint">–</span>'}</td>`;
+function renderRows() {
+  const q = state.q.trim().toLowerCase();
+  let list = GROUPS.filter((g) => matches(g, state.filter));
+  if (q) list = list.filter((g) => g.name.toLowerCase().includes(q));
+  list.sort(SORTS[state.sort]);
+  document.getElementById("rows").innerHTML = list.map((g) => `<tr>
+    <td>${esc(g.name)}</td>${cell(g.sT)}${cell(g.oH)}${cell(g.sH)}${cell(g.oT)}
+    <td class="r">${gapHtml(g.turek - g.hinson)}</td></tr>`).join("") || '<tr><td colspan="6" class="faint">No matching groups.</td></tr>';
+}
+document.getElementById("q").addEventListener("input", (e) => { state.q = e.target.value; renderRows(); });
+document.getElementById("sort").addEventListener("change", (e) => { state.sort = e.target.value; renderRows(); });
+
+renderChart(); renderPills(); renderRows();
+})();
+</script>
+</body>
+</html>
