@@ -1,0 +1,609 @@
+{
+  "37": [
+    "Jasper",
+    "Lucas",
+    "Mahaska",
+    "Marion",
+    "Monroe",
+    "Polk",
+    "Warren"
+  ],
+  "59": [
+    "Cerro Gordo",
+    "Franklin",
+    "Worth"
+  ],
+  "16": [
+    "Fremont",
+    "Mills",
+    "Montgomery",
+    "Pottawattamie"
+  ],
+  "3": [
+    "Plymouth",
+    "Sioux"
+  ],
+  "84": [
+    "Benton",
+    "Buchanan",
+    "Iowa",
+    "Linn",
+    "Tama"
+  ],
+  "51": [
+    "Boone",
+    "Grundy",
+    "Hamilton",
+    "Hardin",
+    "Jasper",
+    "Marshall",
+    "Polk",
+    "Story"
+  ],
+  "20": [
+    "Pottawattamie"
+  ],
+  "15": [
+    "Crawford",
+    "Harrison",
+    "Mills",
+    "Monona",
+    "Pottawattamie",
+    "Shelby"
+  ],
+  "13": [
+    "Cherokee",
+    "Harrison",
+    "Monona",
+    "O'Brien",
+    "Plymouth",
+    "Woodbury"
+  ],
+  "30": [
+    "Polk",
+    "Warren"
+  ],
+  "81": [
+    "Scott"
+  ],
+  "83": [
+    "Benton",
+    "Delaware",
+    "Johnson",
+    "Linn"
+  ],
+  "65": [
+    "Delaware",
+    "Dubuque",
+    "Jackson",
+    "Jones"
+  ],
+  "97": [
+    "Scott"
+  ],
+  "29": [
+    "Polk",
+    "Warren"
+  ],
+  "64": [
+    "Allamakee",
+    "Clayton",
+    "Delaware",
+    "Dubuque",
+    "Fayette",
+    "Winneshiek"
+  ],
+  "95": [
+    "Cedar",
+    "Des Moines",
+    "Henry",
+    "Jefferson",
+    "Johnson",
+    "Lee",
+    "Louisa",
+    "Muscatine",
+    "Washington"
+  ],
+  "45": [
+    "Boone",
+    "Dallas",
+    "Polk",
+    "Story",
+    "Warren"
+  ],
+  "1": [
+    "Woodbury"
+  ],
+  "25": [
+    "Davis",
+    "Keokuk",
+    "Wapello"
+  ],
+  "75": [
+    "Black Hawk"
+  ],
+  "31": [
+    "Dallas",
+    "Polk",
+    "Warren"
+  ],
+  "48": [
+    "Boone",
+    "Dallas",
+    "Greene",
+    "Story",
+    "Webster"
+  ],
+  "56": [
+    "Hamilton",
+    "Hancock",
+    "Humboldt",
+    "Kossuth",
+    "Palo Alto",
+    "Pocahontas",
+    "Webster",
+    "Winnebago",
+    "Wright"
+  ],
+  "96": [
+    "Cedar",
+    "Muscatine"
+  ],
+  "67": [
+    "Benton",
+    "Black Hawk",
+    "Buchanan",
+    "Clayton",
+    "Delaware",
+    "Dubuque",
+    "Fayette",
+    "Jones",
+    "Linn"
+  ],
+  "63": [
+    "Chickasaw",
+    "Fayette",
+    "Howard",
+    "Mitchell",
+    "Winneshiek"
+  ],
+  "10": [
+    "Buena Vista",
+    "Clay",
+    "Dickinson",
+    "Emmet",
+    "Humboldt",
+    "Kossuth",
+    "O'Brien",
+    "Osceola",
+    "Palo Alto",
+    "Pocahontas"
+  ],
+  "60": [
+    "Cerro Gordo",
+    "Floyd",
+    "Franklin",
+    "Hancock",
+    "Mitchell",
+    "Winnebago",
+    "Worth",
+    "Wright"
+  ],
+  "21": [
+    "Clarke",
+    "Lucas",
+    "Marion",
+    "Warren"
+  ],
+  "41": [
+    "Polk"
+  ],
+  "73": [
+    "Linn"
+  ],
+  "2": [
+    "Plymouth",
+    "Woodbury"
+  ],
+  "53": [
+    "Grundy",
+    "Jasper",
+    "Mahaska",
+    "Marshall",
+    "Poweshiek",
+    "Tama"
+  ],
+  "35": [
+    "Polk"
+  ],
+  "49": [
+    "Story"
+  ],
+  "9": [
+    "Dickinson",
+    "Emmet",
+    "Hancock",
+    "Humboldt",
+    "Kossuth",
+    "Palo Alto",
+    "Winnebago"
+  ],
+  "92": [
+    "Henry",
+    "Iowa",
+    "Jefferson",
+    "Johnson",
+    "Keokuk",
+    "Louisa",
+    "Washington"
+  ],
+  "32": [
+    "Dallas",
+    "Polk"
+  ],
+  "74": [
+    "Linn"
+  ],
+  "42": [
+    "Polk"
+  ],
+  "12": [
+    "Cherokee",
+    "Crawford",
+    "Harrison",
+    "Ida",
+    "Monona",
+    "Sac",
+    "Shelby",
+    "Woodbury"
+  ],
+  "90": [
+    "Johnson"
+  ],
+  "17": [
+    "Adair",
+    "Adams",
+    "Cass",
+    "Montgomery",
+    "Page",
+    "Ringgold",
+    "Taylor",
+    "Union"
+  ],
+  "54": [
+    "Black Hawk",
+    "Bremer",
+    "Butler",
+    "Franklin",
+    "Grundy",
+    "Hamilton",
+    "Hardin",
+    "Marshall",
+    "Story",
+    "Tama"
+  ],
+  "58": [
+    "Black Hawk",
+    "Bremer",
+    "Butler",
+    "Cerro Gordo",
+    "Chickasaw",
+    "Floyd",
+    "Franklin",
+    "Howard",
+    "Mitchell"
+  ],
+  "62": [
+    "Black Hawk"
+  ],
+  "19": [
+    "Pottawattamie"
+  ],
+  "28": [
+    "Dallas",
+    "Madison"
+  ],
+  "34": [
+    "Polk"
+  ],
+  "6": [
+    "Buena Vista",
+    "Cherokee",
+    "Clay",
+    "O'Brien",
+    "Sac"
+  ],
+  "39": [
+    "Polk"
+  ],
+  "14": [
+    "Woodbury"
+  ],
+  "11": [
+    "Audubon",
+    "Calhoun",
+    "Carroll",
+    "Cass",
+    "Crawford",
+    "Guthrie",
+    "Harrison",
+    "Pottawattamie",
+    "Shelby"
+  ],
+  "5": [
+    "Buena Vista",
+    "Cherokee",
+    "Ida",
+    "Lyon",
+    "O'Brien",
+    "Osceola",
+    "Sac",
+    "Sioux"
+  ],
+  "100": [
+    "Henry",
+    "Lee",
+    "Van Buren"
+  ],
+  "33": [
+    "Polk"
+  ],
+  "98": [
+    "Muscatine",
+    "Scott"
+  ],
+  "79": [
+    "Linn"
+  ],
+  "50": [
+    "Boone",
+    "Story"
+  ],
+  "89": [
+    "Johnson"
+  ],
+  "27": [
+    "Dallas"
+  ],
+  "55": [
+    "Boone",
+    "Cerro Gordo",
+    "Franklin",
+    "Hamilton",
+    "Hardin",
+    "Story",
+    "Webster",
+    "Wright"
+  ],
+  "93": [
+    "Scott"
+  ],
+  "91": [
+    "Benton",
+    "Iowa",
+    "Johnson",
+    "Keokuk",
+    "Linn",
+    "Poweshiek",
+    "Tama",
+    "Washington"
+  ],
+  "94": [
+    "Scott"
+  ],
+  "8": [
+    "Humboldt",
+    "Webster"
+  ],
+  "44": [
+    "Dallas",
+    "Polk"
+  ],
+  "46": [
+    "Boone",
+    "Dallas",
+    "Polk"
+  ],
+  "52": [
+    "Jasper",
+    "Marshall"
+  ],
+  "61": [
+    "Black Hawk"
+  ],
+  "78": [
+    "Linn"
+  ],
+  "80": [
+    "Linn"
+  ],
+  "87": [
+    "Davis",
+    "Henry",
+    "Jefferson",
+    "Van Buren",
+    "Wapello"
+  ],
+  "99": [
+    "Des Moines",
+    "Henry",
+    "Lee"
+  ],
+  "38": [
+    "Jasper",
+    "Mahaska",
+    "Marshall",
+    "Polk",
+    "Poweshiek",
+    "Story"
+  ],
+  "66": [
+    "Cedar",
+    "Delaware",
+    "Dubuque",
+    "Jackson",
+    "Jones",
+    "Linn"
+  ],
+  "36": [
+    "Polk"
+  ],
+  "85": [
+    "Johnson",
+    "Linn"
+  ],
+  "72": [
+    "Dubuque"
+  ],
+  "22": [
+    "Clarke",
+    "Madison",
+    "Polk",
+    "Warren"
+  ],
+  "24": [
+    "Appanoose",
+    "Clarke",
+    "Decatur",
+    "Lucas",
+    "Madison",
+    "Marion",
+    "Monroe",
+    "Ringgold",
+    "Warren",
+    "Wayne"
+  ],
+  "23": [
+    "Adair",
+    "Adams",
+    "Cass",
+    "Clarke",
+    "Dallas",
+    "Decatur",
+    "Guthrie",
+    "Madison",
+    "Ringgold",
+    "Union"
+  ],
+  "47": [
+    "Adair",
+    "Audubon",
+    "Boone",
+    "Calhoun",
+    "Carroll",
+    "Cass",
+    "Dallas",
+    "Greene",
+    "Guthrie",
+    "Webster"
+  ],
+  "70": [
+    "Cedar",
+    "Clinton",
+    "Jackson",
+    "Jones",
+    "Scott"
+  ],
+  "82": [
+    "Cedar",
+    "Johnson",
+    "Jones",
+    "Linn",
+    "Muscatine",
+    "Scott"
+  ],
+  "26": [
+    "Appanoose",
+    "Davis",
+    "Keokuk",
+    "Lucas",
+    "Mahaska",
+    "Marion",
+    "Monroe",
+    "Wapello",
+    "Wayne"
+  ],
+  "68": [
+    "Black Hawk",
+    "Bremer",
+    "Buchanan",
+    "Chickasaw",
+    "Fayette"
+  ],
+  "86": [
+    "Johnson"
+  ],
+  "77": [
+    "Johnson",
+    "Linn"
+  ],
+  "88": [
+    "Iowa",
+    "Jasper",
+    "Jefferson",
+    "Keokuk",
+    "Mahaska",
+    "Monroe",
+    "Poweshiek",
+    "Wapello",
+    "Washington"
+  ],
+  "7": [
+    "Boone",
+    "Buena Vista",
+    "Calhoun",
+    "Carroll",
+    "Crawford",
+    "Greene",
+    "Humboldt",
+    "Ida",
+    "Palo Alto",
+    "Pocahontas",
+    "Sac",
+    "Webster"
+  ],
+  "18": [
+    "Adams",
+    "Audubon",
+    "Cass",
+    "Fremont",
+    "Mills",
+    "Montgomery",
+    "Page",
+    "Pottawattamie"
+  ],
+  "40": [
+    "Polk"
+  ],
+  "69": [
+    "Clinton",
+    "Jackson",
+    "Scott"
+  ],
+  "76": [
+    "Benton",
+    "Black Hawk",
+    "Grundy",
+    "Tama"
+  ],
+  "71": [
+    "Dubuque"
+  ],
+  "43": [
+    "Polk"
+  ],
+  "57": [
+    "Black Hawk",
+    "Bremer",
+    "Butler",
+    "Chickasaw",
+    "Floyd",
+    "Franklin",
+    "Grundy",
+    "Hardin"
+  ],
+  "4": [
+    "Lyon",
+    "Sioux"
+  ]
+}

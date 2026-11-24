@@ -26,6 +26,11 @@ jobs:
           cp index.html bill-list.html vote-table.html compare.html 404.html app.css _site/
           cp js/votes.js js/vote-data-2025.js js/vote-data-2026.js _site/js/
           touch _site/.nojekyll
+      - name: Assemble campaign template
+        run: |
+          mkdir -p _site/campaignTemplate/data
+          cp -r campaignTemplate/index.html campaignTemplate/candidate-guide.css campaignTemplate/guide.js _site/campaignTemplate/
+          cp campaignTemplate/data/*.json _site/campaignTemplate/data/
       - name: Assemble midterm pages
         run: |
           mkdir -p _site/midterm

@@ -1,0 +1,324 @@
+.campaign-guide {
+    --guide-max: 52rem;
+    --nav-w: 14.5rem;
+    --step-gap: 2rem;
+}
+
+.campaign-guide .layout {
+    display: grid;
+    gap: 1.5rem;
+    max-width: calc(var(--guide-max) + var(--nav-w) + 3rem);
+    margin: 0 auto;
+}
+
+@media (min-width: 56rem) {
+    .campaign-guide .layout {
+        grid-template-columns: var(--nav-w) 1fr;
+        align-items: start;
+    }
+}
+
+.campaign-guide .guide-nav {
+    position: sticky;
+    top: 1rem;
+    padding: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-size: 0.8125rem;
+}
+
+.campaign-guide .guide-nav h2 {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-muted);
+}
+
+.campaign-guide .guide-nav ol {
+    margin: 0;
+    padding-left: 1.15rem;
+    line-height: 1.65;
+}
+
+.campaign-guide .guide-nav a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.campaign-guide .guide-nav a:hover {
+    text-decoration: underline;
+}
+
+.campaign-guide .guide-nav a[aria-current="true"] {
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.campaign-guide main {
+    min-width: 0;
+    max-width: var(--guide-max);
+}
+
+.campaign-guide .hero-card {
+    padding: 1.25rem 1.35rem;
+    margin-bottom: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    border-left: 4px solid var(--party-d);
+}
+
+.campaign-guide .hero-card label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.35rem;
+}
+
+.campaign-guide .hero-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    align-items: flex-end;
+}
+
+.campaign-guide select,
+.campaign-guide input[type="text"],
+.campaign-guide input[type="email"],
+.campaign-guide input[type="tel"] {
+    font: inherit;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--ink);
+    min-width: 12rem;
+}
+
+.campaign-guide select:focus-visible,
+.campaign-guide input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+.campaign-guide .deadline-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8125rem;
+}
+
+.campaign-guide .deadline-strip li {
+    padding: 0.35rem 0.65rem;
+    background: var(--accent-soft);
+    border-radius: var(--radius);
+    color: var(--ink);
+}
+
+.campaign-guide .deadline-strip strong {
+    color: var(--accent);
+}
+
+.campaign-guide .step {
+    scroll-margin-top: 1rem;
+    margin-bottom: var(--step-gap);
+    padding-bottom: var(--step-gap);
+    border-bottom: 1px solid var(--line);
+}
+
+.campaign-guide .step:last-child {
+    border-bottom: none;
+}
+
+.campaign-guide .step-header {
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+    margin-bottom: 0.75rem;
+}
+
+.campaign-guide .step-num {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--party-d);
+    background: var(--party-d-bg);
+    border-radius: 50%;
+}
+
+.campaign-guide h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.campaign-guide h3 {
+    margin: 1.25rem 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.campaign-guide p,
+.campaign-guide li {
+    color: var(--ink);
+    max-width: 65ch;
+}
+
+.campaign-guide .muted {
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+}
+
+.campaign-guide a {
+    color: var(--accent);
+}
+
+.campaign-guide .card {
+    margin: 1rem 0;
+    padding: 1rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.campaign-guide .card-accent {
+    border-left: 3px solid var(--party-d);
+}
+
+.campaign-guide table.guide-table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    margin: 0.75rem 0;
+}
+
+.campaign-guide .guide-table th,
+.campaign-guide .guide-table td {
+    text-align: left;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--line);
+    vertical-align: top;
+}
+
+.campaign-guide .guide-table th {
+    background: var(--bg);
+    font-weight: 600;
+}
+
+.campaign-guide .guide-table input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font: inherit;
+    padding: 0.2rem 0;
+}
+
+.campaign-guide .guide-table input:focus {
+    outline: 1px dashed var(--accent);
+}
+
+.campaign-guide .checklist {
+    list-style: none;
+    margin: 0.75rem 0;
+    padding: 0;
+}
+
+.campaign-guide .checklist li {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    margin-bottom: 0.45rem;
+    max-width: 65ch;
+}
+
+.campaign-guide .checklist input {
+    margin-top: 0.25rem;
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--party-d);
+}
+
+.campaign-guide .vendor-panel:empty::before {
+    content: "Choose your House district above to see a recommended print vendor.";
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+}
+
+.campaign-guide .vendor-panel h3 {
+    margin-top: 0;
+}
+
+.campaign-guide .contact-grid {
+    display: grid;
+    gap: 0.75rem;
+}
+
+@media (min-width: 40rem) {
+    .campaign-guide .contact-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.campaign-guide .contact-card {
+    padding: 0.85rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+}
+
+.campaign-guide .contact-card strong {
+    display: block;
+    margin-bottom: 0.35rem;
+}
+
+.campaign-guide .county-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    align-items: center;
+}
+
+.campaign-guide .county-table-wrap {
+    max-height: 16rem;
+    overflow: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.campaign-guide .county-table {
+    margin: 0;
+}
+
+.campaign-guide .county-table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.campaign-guide .footer-note {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.8125rem;
+    color: var(--ink-muted);
+}
+
+.campaign-guide .back-link {
+    display: inline-block;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iowa House candidate guide</title>
+    <meta name="description" content="Step-by-step plan for new Iowa House candidates: filing, campaign finance, print vendors, digital ads, and county Democratic chairs.">
+    <link rel="stylesheet" href="../app.css">
+    <link rel="stylesheet" href="candidate-guide.css">
+</head>
+
+<body class="campaign-guide">
+    <div class="container">
+        <a class="back-link" href="../index.html">← Iowa Legislature floor votes</a>
+
+        <header class="page-header">
+            <h1>Iowa House candidate guide</h1>
+            <p class="subtitle">A step-by-step checklist for Democrats running for the Iowa House—forms, deadlines, money, vendors, and party contacts. Your answers are saved in this browser only.</p>
+        </header>
+
+        <div class="layout">
+            <nav class="guide-nav" aria-label="On this page">
+                <h2>Steps</h2>
+                <ol>
+                    <li><a href="#start">Start here</a></li>
+                    <li><a href="#step-1">Profile</a></li>
+                    <li><a href="#step-2">Nomination papers</a></li>
+                    <li><a href="#step-3">Campaign finance</a></li>
+                    <li><a href="#step-4">Print &amp; signs</a></li>
+                    <li><a href="#step-5">Digital ads</a></li>
+                    <li><a href="#step-6">County chairs</a></li>
+                    <li><a href="#step-7">Timeline</a></li>
+                    <li><a href="#step-8">Compliance</a></li>
+                    <li><a href="#step-9">Sign-off</a></li>
+                </ol>
+            </nav>
+
+            <main>
+                <section id="start" class="step hero-card">
+                    <div class="hero-row">
+                        <div>
+                            <label for="hd-select">Your House district (HD)</label>
+                            <select id="hd-select" name="hd" aria-describedby="hd-help">
+                                <option value="">Select district…</option>
+                            </select>
+                            <p id="hd-help" class="muted" style="margin:0.35rem 0 0;max-width:36ch">We’ll suggest a print shop and list county chairs for this district.</p>
+                        </div>
+                    </div>
+                    <ul class="deadline-strip" aria-label="Key 2026 dates">
+                        <li><strong>File papers:</strong> Feb 23 – Mar 13, 5 p.m.</li>
+                        <li><strong>Primary:</strong> June 2</li>
+                        <li><strong>General:</strong> Nov 3</li>
+                        <li><strong>50</strong> petition signatures</li>
+                    </ul>
+                </section>
+
+                <section class="contact-grid" aria-label="Key agencies">
+                    <div class="contact-card">
+                        <strong>Iowa Secretary of State</strong>
+                        Elections · (515) 281-0145<br>
+                        <a href="https://sos.iowa.gov/">sos.iowa.gov</a>
+                    </div>
+                    <div class="contact-card">
+                        <strong>IECDB</strong>
+                        Campaign finance · (515) 281-4028<br>
+                        <a href="mailto:ethicsboard@iowa.gov">ethicsboard@iowa.gov</a> ·
+                        <a href="https://ethics.iowa.gov/">ethics.iowa.gov</a>
+                    </div>
+                    <div class="contact-card">
+                        <strong>Iowa Democratic Party</strong>
+                        (515) 244-7292<br>
+                        <a href="mailto:info@iowademocrats.org">info@iowademocrats.org</a>
+                    </div>
+                </section>
+
+                <section id="step-1" class="step">
+                    <div class="step-header">
+                        <span class="step-num" aria-hidden="true">1</span>
+                        <h2>Candidate profile</h2>
+                    </div>
+                    <p>Fill in the basics. Use your legal name as it appears on voter registration.</p>
+                    <table class="guide-table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Legal name</th>
+                                <td><input type="text" data-store="legalName" autocomplete="name" /></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Preferred ballot name</th>
+                                <td><input type="text" data-store="ballotName" /></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">HD number</th>
+                                <td><input type="text" id="profile-hd" data-store="hd" inputmode="numeric" /></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">County of residence</th>
+                                <td><input type="text" data-store="county" /></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Campaign mailing address</th>
+                                <td><input type="text" data-store="mailAddress" autocomplete="street-address" /></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Campaign email / phone</th>
+                                <td>
+                                    <input type="email" data-store="email" autocomplete="email" style="margin-bottom:0.35rem" /><br>
+                                    <input type="tel" data-store="phone" autocomplete="tel" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Website &amp; social</th>
+                                <td><input type="text" data-store="webSocial" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="muted">Residency: live in the district by <strong>60 days before the general election</strong> (Sept 4, 2026 for the Nov 3, 2026 election). <a href="https://www.legis.iowa.gov/docs/code/2026/39.html">Iowa Code § 39.27</a></p>
+                    <p class="muted">Primary candidates must be registered Democrats.</p>
+                </section>
+
+                <section id="step-2" class="step">
+                    <div class="step-header">
+                        <span class="step-num" aria-hidden="true">2</span>
+                        <h2>Nomination papers (Secretary of State)</h2>
+                    </div>
+                    <p>State House candidates file with the <strong>Secretary of State</strong>, not the county auditor. No filing fee.</p>
+
+                    <table class="guide-table">
+                        <thead>
+                            <tr><th>Milestone</th><th>2026 date</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Filing window (primary)</td><td><strong>Feb 23 – Mar 13, 5:00 p.m.</strong></td></tr>
+                            <tr><td>Primary election</td><td>Tuesday, <strong>June 2</strong></td></tr>
+                            <tr><td>General election</td><td>Tuesday, <strong>Nov 3</strong></td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Forms — file both together</h3>
+                    <table class="guide-table">
+                        <thead>
+                            <tr><th>Form</th><th>Download</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Affidavit of Candidacy</td>
+                                <td><a href="https://sos.iowa.gov/elections/pdf/candidates/affidavit.pdf">affidavit.pdf</a></td>
+                            </tr>
+                            <tr>
+                                <td>Nomination Petition (primary)</td>
+                                <td><a href="https://sos.iowa.gov/elections/pdf/candidates/nompetprim.pdf">nompetprim.pdf</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>You need <strong>50</strong> valid signatures from eligible electors in your House district.</p>
+
+                    <ul class="checklist">
+                        <li><label><input type="checkbox" data-check="petition-form" /> SOS petition form only (8½″ × 11″)</label></li>
+                        <li><label><input type="checkbox" data-check="petition-address" /> Each signer: signature, street address, city, date</label></li>
+                        <li><label><input type="checkbox" data-check="petition-bind" /> Sheets stapled or bound as one petition</label></li>
+                        <li><label><input type="checkbox" data-check="petition-copy" /> Photocopy kept for your records</label></li>
+                        <li><label><input type="checkbox" data-check="petition-mail" /> If mailing: SOS must <em>receive</em> by deadline (postmark does not count)</label></li>
+                        <li><label><input type="checkbox" data-check="petition-early" /> Filed early enough to fix errors if rejected</label></li>
+                    </ul>
+
+                    <p class="muted">Mail: Secretary of State, Elections Division, Lucas Building, 321 E. 12th St., Des Moines, IA 50319. See the <a href="https://sos.iowa.gov/primary-election">2026 Primary Candidate’s Guide</a> and <a href="https://www.legis.iowa.gov/legislators/districts/house">district maps (PDF)</a>.</p>
+                </section>
+
+                <section id="step-3" class="step">
+                    <div class="step-header">
+                        <span class="step-num" aria-hidden="true">3</span>
+                        <h2>Campaign finance (IECDB)</h2>
+                    </div>
+                    <p>Download the <a href="https://ethics.iowa.gov/media/43/download?inline=">Statehouse candidate packet (PDF)</a> for the full calendar.</p>
+
+                    <div class="card card-accent">
+                        <p><strong>Register</strong> when you raise, spend, or incur debts over <strong>$1,000</strong> in a calendar year (including your own money): file <strong>DR-1</strong> within <strong>10 days</strong> in the <a href="https://webapp.iecdb.iowa.gov">Web Reporting System</a>. Committee name must include your last name.</p>
+                    </div>
+
+                    <h3>Treasurer</h3>
+                    <table class="guide-table">
+                        <tbody>
+                            <tr><th scope="row">Who</th><td>Iowa resident, age 18+. <strong>You may serve as your own treasurer.</strong></td></tr>
+                            <tr><th scope="row">Duties</th><td>Deposit within 7 days; detailed records 5 years; file disclosure reports.</td></tr>
+                            <tr><th scope="row">Collectors</th><td>Anyone who takes in money must give it to the treasurer within 15 days.</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="muted">During the legislative session, do not accept lobbyist or PAC money if you are a General Assembly candidate. <a href="https://ethics.iowa.gov/campaigns/candidate-guide">IECDB candidate guide</a></p>
+
+                    <h3>Bank account checklist</h3>
+                    <ul class="checklist">
+                        <li><label><input type="checkbox" data-check="bank-treasurer" /> Treasurer chosen (can be candidate)</label></li>
+                        <li><label><input type="checkbox" data-check="bank-ein" /> IRS EIN obtained if bank requires it</label></li>
+                        <li><label><input type="checkbox" data-check="bank-dr1" /> DR-1 filed (ask IECDB if bank needs it first)</label></li>
+                        <li><label><input type="checkbox" data-check="bank-open" /> Separate account at an <strong>Iowa</strong> bank in committee name</label></li>
+                        <li><label><input type="checkbox" data-check="bank-no-mix" /> No personal or prohibited (corporate/bank) contributions</label></li>
+                    </ul>
+
+                    <h3>2026 disclosure due dates</h3>
+                    <table class="guide-table">
+                        <thead>
+                            <tr><th>Due</th><th>Covers</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>May 19</td><td>Jan 1 – May 14</td></tr>
+                            <tr><td>July 19</td><td>May 15 – Jul 14</td></tr>
+                            <tr><td>Oct 19*</td><td>Jul 15 – Oct 14</td></tr>
+                            <tr><td>Jan 19, 2027</td><td>Through Dec 31, 2026</td></tr>
+                            <tr><td>Fri. before primary / general</td><td>Activity after prior report</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="muted">*Or Wednesday after Columbus Day if that applies. Supplementary report if ≥ $1,000 comes in after an election before the next scheduled report.</p>
+                </section>
+
+                <section id="step-4" class="step">
+                    <div class="step-header">
+                        <span class="step-num" aria-hidden="true">4</span>
+                        <h2>Print materials &amp; yard signs</h2>
+                    </div>
+                    <div class="card vendor-panel" id="vendor-panel" aria-live="polite"></div>
+
+                    <ul class="checklist">
+                        <li><label><input type="checkbox" data-check="print-quote" /> Quotes for brochures, postcards, palm cards, and yard signs together</label></li>
+                        <li><label><input type="checkbox" data-check="print-union" /> Union bug requested if county or labor partners expect it</label></li>
+                        <li><label><input type="checkbox" data-check="print-paidfor" /> “Paid for by [committee]” on printed mail and most ads</label></li>
+                        <li><label><input type="checkbox" data-check="print-wrs" /> Paid from committee account; logged in WRS</label></li>
+                    </ul>
+                </section>
+
+                <section id="step-5" class="step">
+                    <div class="step-header">
+                        <span class="step-num" aria-hidden="true">5</span>
+                        <h2>Digital ads (YouTube &amp; Facebook)</h2>
+                    </div>
+                    <p><strong>Recommended partner:</strong> <a href="https://www.corsaircampaigns.com/">Corsair Campaigns</a> — creative and media programs for legislative races (video, display, social).</p>
+                    <ul class="checklist">
+                        <li><label><input type="checkbox" data-check="dig-dr1" /> DR-1 filed if activity will exceed $1,000</label></li>
+                        <li><label><input type="checkbox" data-check="dig-disclaimer" /> “Paid for by” on paid social and video</label></li>
+                        <li><label><input type="checkbox" data-check="dig-auth" /> Meta / Google political ad authorization complete</label></li>
+                        <li><label><input type="checkbox" data-check="dig-wrs" /> Spend from committee account; reported in WRS</label></li>
+                    </ul>
+                </section>
+
+                <section id="step-6" class="step">
+                    <div class="step-header">
+                        <span class="step-num" aria-hidden="true">6</span>
+                        <h2>County Democratic chairs</h2>
+                    </div>
+                    <p>Meet chairs in every county your district touches. Official directory: <a href="https://iowademocrats.org/county-parties/">iowademocrats.org/county-parties</a></p>
+                    <div class="county-tools">
+                        <label for="county-search">Search</label>
+                        <input type="search" id="county-search" placeholder="County or chair name" />
+                    </div>
+                    <p id="county-hint" class="muted"></p>
+                    <div class="county-table-wrap">
+                        <table class="guide-table county-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">County</th>
+                                    <th scope="col">Chair(s)</th>
+                                    <th scope="col">Contacted</th>
+                                </tr>
+                            </thead>
+                            <tbody id="county-chair-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="step-7" class="step">
+                    <div class="step-header">
+                        <span class="step-num" aria-hidden="true">7</span>
+                        <h2>Suggested timeline</h2>
+                    </div>
+                    <table class="guide-table">
+                        <thead>
+                            <tr><th>When</th><th>Focus</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>12+ months out</td><td>County chairs; opponent research; budget</td></tr>
+                            <tr><td>Jan–Feb 2026</td><td>Petition team; bank account / DR-1</td></tr>
+                            <tr><td><strong>Feb 23 – Mar 13</strong></td><td><strong>File nomination papers</strong></td></tr>
+                            <tr><td>Mar–Apr</td><td>Canvass; fundraisers; reports as needed</td></tr>
+                            <tr><td>Apr–May</td><td>Mail and digital; endorsements; May 19 report</td></tr>
+                            <tr><td>Late May</td><td>Primary GOTV (June 2)</td></tr>
+                            <tr><td>Jun–Nov</td><td>General campaign; July / Oct / Jan reports</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section id="step-8" class="step">
+                    <div class="step-header">
+                        <span class="step-num" aria-hidden="true">8</span>
+                        <h2>Compliance reminders</h2>
+                    </div>
+                    <ul>
+                        <li>No public resources for campaigning (<a href="https://www.legis.iowa.gov/docs/code/2026/68A.html">§ 68A.505</a>).</li>
+                        <li>Yard signs: respect property rights; no polling-place buffer violations on election days.</li>
+                        <li>Keep contracts, invoices, and bank statements <strong>five years</strong>.</li>
+                        <li>When unsure, call IECDB before you act: ethicsboard@iowa.gov · (515) 281-4028</li>
+                    </ul>
+                </section>
+
+                <section id="step-9" class="step">
+                    <div class="step-header">
+                        <span class="step-num" aria-hidden="true">9</span>
+                        <h2>Sign-off</h2>
+                    </div>
+                    <table class="guide-table">
+                        <thead>
+                            <tr><th>Role</th><th>Name</th><th>Date</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Candidate</td>
+                                <td><input type="text" data-store="sign-candidate" /></td>
+                                <td><input type="text" data-store="sign-candidate-date" /></td>
+                            </tr>
+                            <tr>
+                                <td>Treasurer</td>
+                                <td><input type="text" data-store="sign-treasurer" /></td>
+                                <td><input type="text" data-store="sign-treasurer-date" /></td>
+                            </tr>
+                            <tr>
+                                <td>Campaign chair</td>
+                                <td><input type="text" data-store="sign-chair" /></td>
+                                <td><input type="text" data-store="sign-chair-date" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <p class="footer-note">Guide version Nov 2026. Official law and agency sites control. Markdown sources: <a href="iowaHouseCandidateTemplate.md">iowaHouseCandidateTemplate.md</a>.</p>
+            </main>
+        </div>
+    </div>
+
+    <script type="module" src="guide.js"></script>
+</body>
+
+</html>
